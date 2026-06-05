@@ -31,7 +31,7 @@ public class BusGrid
     }
 
     // Busca o passageiro em uma coordenada especifica
-    public Passanger GetPassangerAt(int x, int y)
+    public Passenger GetPassangerAt(int x, int y)
     {
         if (IsPositionOutOfBounds(x, y))
         {
@@ -48,7 +48,7 @@ public class BusGrid
         {
             for (int y = 0; y < Height; y++)
             {
-                if (grid[x, y] != null1)
+                if (grid[x, y] != null)
                 {
                     passengers.Add(grid[x, y]);
                 }
