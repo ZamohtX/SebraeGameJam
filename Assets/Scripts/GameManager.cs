@@ -38,6 +38,7 @@ public class GameManager : MonoBehaviour
         if (!registeredSeats.Contains(seat))
         {
             registeredSeats.Add(seat);
+            Debug.Log($" Assento: {seat.GridX} | {seat.GridY}");
         }
     }
 

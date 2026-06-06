@@ -7,7 +7,8 @@ public class BusSeatView : MonoBehaviour
     [SerializeField] private int gridY; // CORRIGIDO: SerializeField com minúsculo
 
     [Header("Referência visual do passageiro")]
-    [SerializeField] private PassengerView passengerView; // PADRONIZADO: com 'e'
+    [SerializeField]
+    PassengerView passengerView; // PADRONIZADO: com 'e'
 
     public int GridX => gridX;
     public int GridY => gridY;

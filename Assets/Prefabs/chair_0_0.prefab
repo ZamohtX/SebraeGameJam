@@ -81,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2113232896193769741, guid: 777b47e8ae31b594e933e01729fd4b2a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -163,6 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1905981919917318625}
   - component: {fileID: 831884236103734466}
+  - component: {fileID: 149686666344996725}
   m_Layer: 0
   m_Name: chair_0_0
   m_TagString: Untagged
@@ -245,3 +246,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &149686666344996725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6353730991220867420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be869032cc3c66d4586cf4e6d9d0f684, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BusSeatView
+  gridX: 0
+  gridY: 0
+  passengerView: {fileID: 4422362270985456220}
