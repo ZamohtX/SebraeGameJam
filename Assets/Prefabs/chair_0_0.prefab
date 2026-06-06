@@ -163,7 +163,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1905981919917318625}
   - component: {fileID: 831884236103734466}
-  - component: {fileID: 149686666344996725}
+  - component: {fileID: 3310140838255308113}
   m_Layer: 0
   m_Name: chair_0_0
   m_TagString: Untagged
@@ -246,7 +246,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
---- !u!114 &149686666344996725
+--- !u!114 &3310140838255308113
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -260,4 +260,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BusSeatView
   gridX: 0
   gridY: 0
-  passengerView: {fileID: 4422362270985456220}
+  passengerView: {fileID: 0}
