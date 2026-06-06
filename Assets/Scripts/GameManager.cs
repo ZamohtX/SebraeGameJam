@@ -1,8 +1,11 @@
+
 using System.Collections.Generic;
 using System.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static ThiefTargetCalculator;
+using System.Runtime.CompilerServices;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -13,6 +16,7 @@ public class GameManager : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private GameObject pauseMenuUI;
+    
 
     [SerializeField]
     private SpriteManager spriteManager;
@@ -36,6 +40,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
     }
     private void Start()
     {
