@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: bf3bb0928528dc14ab933fcdd1a2c80f
+guid: 1ae296a2e88c64145a029fe42620878b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3677753362289523536
-    second: 4-Grama_0
+      213: -2113232896193769741
+    second: bus_person_0_0_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 4-Grama_0
+      name: bus_person_0_0_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1080
-        height: 1350
+        width: 574
+        height: 787
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 05bf3ca82310a0330800000000000000
-      internalID: 3677753362289523536
+      spriteID: 3fe43b690e94ca2e0800000000000000
+      internalID: -2113232896193769741
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      4-Grama_0: 3677753362289523536
+      bus_person_0_0_0: -2113232896193769741
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -217,14 +217,13 @@ public static class ThiefTargetCalculator
         return result;
     }
 
-    private static List<Passenger> GetAllPassengers(
-    BusGrid grid)
+    private static List<Passenger> GetAllPassengers(BusGrid grid)
     {
         List<Passenger> result = new();
 
         foreach (Passenger passenger in grid.GetAllPassengers())
         {
-            if (passenger.Status != PassengerStatus.Thief)
+            if (isValid(passenger))
             {
                 result.Add(passenger);
             }

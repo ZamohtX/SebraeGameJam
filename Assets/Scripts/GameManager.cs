@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static ThiefTargetCalculator;
@@ -16,10 +17,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private SpriteManager spriteManager;
 
-    [SerializeField]
-    private PassengerView passengerPrefab;
-
     public BusGrid BusGrid { get; private set; }
+
+    private List<ThiefActionRule> CurrentRules = new List<ThiefActionRule>();
+
+    [SerializeField]
+    private RulesPanelUI rulesPanelUI;
 
     private void Awake()
     {
@@ -36,54 +39,58 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        BusGrid = new BusGrid(4, 11);
+        BusGrid = new BusGrid(4, 5);
 
-        //for (int i = 0; i < 10; i++)
+        SpawnRandomPassengers(3);
+
+        //Passenger thief = new Passenger("T", 1, 5, 0, 0);
+        //thief.Status = PassengerStatus.Thief;
+
+        //Passenger p1 = new Passenger("P1", 0, 4, 0, 0);
+        //Passenger p2 = new Passenger("P2", 2, 6, 0, 0);
+        //Passenger p3 = new Passenger("P3", 1, 9, 0, 0);
+        //Passenger p4 = new Passenger("P4", 3, 5, 0, 0);
+        //Passenger p5 = new Passenger("P5", 2, 7, 0, 0);
+        //Passenger p6 = new Passenger("P6", 1, 8, 0, 0);
+        //p6.Status = PassengerStatus.Robbed;
+
+        //BusGrid.AddPassenger(thief, 1, 5);
+        //BusGrid.AddPassenger(p1, 0, 4);
+        //BusGrid.AddPassenger(p2, 2, 6);
+        //BusGrid.AddPassenger(p3, 1, 9);
+        //BusGrid.AddPassenger(p4, 3, 5);
+        //BusGrid.AddPassenger(p5, 2, 7);
+        //BusGrid.AddPassenger(p6, 1, 8);
+
+        //foreach (ThiefActionRule rule in
+        // System.Enum.GetValues(typeof(ThiefActionRule)))
         //{
-        //    Passenger passenger =
-        //        CreateRandomPassenger(i, 0);
+        //    Debug.Log($"--- {rule} ---");
 
-        //    PassengerView view =
-        //        Instantiate(passengerPrefab);
+        //    List<Passenger> targets =
+        //        ThiefTargetCalculator.CalculatePossibleTargets(
+        //            BusGrid,
+        //            new Vector2Int(thief.GridX, thief.GridY),
+        //            rule);
 
-        //    view.Initialize(passenger, spriteManager);
+        //    foreach (Passenger p in targets)
+        //    {
+        //        Debug.Log($"{p.Id}");
+        //    }
         //}
 
-        Passenger thief = new Passenger("T", 1, 5, 0, 0);
-        thief.Status = PassengerStatus.Thief;
+        //CurrentRules = new List<ThiefActionRule>()
+        //{
+        //    ThiefActionRule.Area,
+        //    ThiefActionRule.KnightMove,
+        //    ThiefActionRule.Random
+        //};
 
-        Passenger p1 = new Passenger("P1", 0, 4, 0, 0);
-        Passenger p2 = new Passenger("P2", 2, 6, 0, 0);
-        Passenger p3 = new Passenger("P3", 1, 9, 0, 0);
-        Passenger p4 = new Passenger("P4", 3, 5, 0, 0);
-        Passenger p5 = new Passenger("P5", 2, 7, 0, 0);
-        Passenger p6 = new Passenger("P6", 1, 8, 0, 0);
-        p6.Status = PassengerStatus.Robbed;
-
-        BusGrid.AddPassenger(thief, 1, 5);
-        BusGrid.AddPassenger(p1, 0, 4);
-        BusGrid.AddPassenger(p2, 2, 6);
-        BusGrid.AddPassenger(p3, 1, 9);
-        BusGrid.AddPassenger(p4, 3, 5);
-        BusGrid.AddPassenger(p5, 2, 7);
-        BusGrid.AddPassenger(p6, 1, 8);
-
-        foreach (ThiefActionRule rule in
-         System.Enum.GetValues(typeof(ThiefActionRule)))
-        {
-            Debug.Log($"--- {rule} ---");
-
-            List<Passenger> targets =
-                ThiefTargetCalculator.CalculatePossibleTargets(
-                    BusGrid,
-                    new Vector2Int(thief.GridX, thief.GridY),
-                    rule);
-
-            foreach (Passenger p in targets)
-            {
-                Debug.Log($"{p.Id}");
-            }
-        }
+        //rulesPanelUI.ShowRules(
+        //    CurrentRules[0],
+        //    CurrentRules[1],
+        //    CurrentRules[2]
+        //);
     }
 
 
@@ -108,6 +115,98 @@ public class GameManager : MonoBehaviour
             spriteManager.GetRandomSpriteId(),
             spriteManager.GetRandomColorId()
         );
+    }
+
+    private void SpawnRandomPassengers(int amount)
+    {
+        HashSet<Vector2Int> occupiedSeats = new();
+
+        for (int i = 0; i < amount; i++)
+        {
+            Vector2Int seatPosition =
+                GetRandomFreeSeat(occupiedSeats);
+
+            CreatePassengerAtSeat(i, seatPosition);
+
+            occupiedSeats.Add(seatPosition);
+        }
+    }
+
+    private Vector2Int GetRandomFreeSeat(
+        HashSet<Vector2Int> occupiedSeats)
+    {
+        List<Vector2Int> availableSeats = new();
+
+        for (int x = 0; x < 4; x++)
+        {
+            for (int y = 0; y < 5; y++)
+            {
+                Vector2Int seat = new(x, y);
+
+                if (!occupiedSeats.Contains(seat))
+                {
+                    availableSeats.Add(seat);
+                }
+            }
+        }
+
+        return availableSeats[
+            Random.Range(0, availableSeats.Count)
+        ];
+    }
+
+    private void CreatePassengerAtSeat(
+        int passengerIndex,
+        Vector2Int seatPosition)
+    {
+        Passenger passenger =
+            CreateRandomPassenger(passengerIndex, 0);
+
+        passenger.GridX = seatPosition.x;
+        passenger.GridY = seatPosition.y;
+
+        BusGrid.AddPassenger(
+            passenger,
+            seatPosition.x,
+            seatPosition.y);
+
+        GameObject chair =
+            GameObject.Find(
+                $"chair_{seatPosition.x}_{seatPosition.y}");
+
+        if (chair == null)
+        {
+            Debug.LogWarning(
+                $"Cadeira chair_{seatPosition.x}_{seatPosition.y} não encontrada.");
+
+            return;
+        }
+
+        Transform personTransform =
+            chair.transform.Find("PersonSprite");
+
+        if (personTransform == null)
+        {
+            Debug.LogWarning(
+                $"PersonSprite não encontrado em {chair.name}");
+
+            return;
+        }
+
+        personTransform.gameObject.SetActive(true);
+
+        PassengerView view = personTransform.GetComponent<PassengerView>();
+
+        view.Initialize(passenger, spriteManager);
+
+        SpriteRenderer personRenderer =
+            personTransform.GetComponent<SpriteRenderer>();
+
+        personRenderer.sprite =
+            spriteManager.GetSprite(passenger.SpriteId);
+
+        personRenderer.color =
+            spriteManager.GetColor(passenger.ClothingColorId);
     }
 
     public void PauseGame()

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: cc53e4a77103b2e4991c27a09aa6b9fd
+guid: d0eb8dfeeeede034680a11343eb326e8
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1946326234231391151
-    second: 2-Fogo_0
+      213: -5036988359974154925
+    second: Prancheta1_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 2-Fogo_0
+      name: Prancheta1_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1080
-        height: 1350
+        width: 32767
+        height: 14890
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 15c3d9f1a924df4e0800000000000000
-      internalID: -1946326234231391151
+      spriteID: 35d86f116c5091ab0800000000000000
+      internalID: -5036988359974154925
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      2-Fogo_0: -1946326234231391151
+      Prancheta1_0: -5036988359974154925
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
