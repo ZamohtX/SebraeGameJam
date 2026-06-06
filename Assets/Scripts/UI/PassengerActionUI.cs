@@ -17,12 +17,19 @@ public class PassengerActionUI : MonoBehaviour
 
     public void Open(PassengerView passengerView)
     {
+        // Se o jogador clicar em OUTRO passageiro com a UI já aberta,
+        // limpamos o highlight do anterior antes de aplicar no novo.
+        if (selectedPassenger != null)
+        {
+            selectedPassenger.SetHighlight(false);
+        }
+
         selectedPassenger = passengerView;
 
-        Vector3 screenPos =
-            Camera.main.WorldToScreenPoint(
-                passengerView.transform.position);
+        // Ativa o highlight no passageiro atual
+        selectedPassenger.SetHighlight(true);
 
+        Vector3 screenPos = Camera.main.WorldToScreenPoint(passengerView.transform.position);
         panel.transform.position = screenPos;
 
         panel.SetActive(true);
@@ -30,16 +37,24 @@ public class PassengerActionUI : MonoBehaviour
 
     public void Close()
     {
-        selectedPassenger = null;
+        // Remove o highlight do passageiro antes de limpar a seleção
+        if (selectedPassenger != null)
+        {
+            selectedPassenger.SetHighlight(false);
+        }
 
+        selectedPassenger = null;
         panel.SetActive(false);
     }
 
     public void Accuse()
     {
-        Debug.Log(
-            $"Acusado: {selectedPassenger.Passenger.Id}");
+        if (selectedPassenger != null)
+        {
+            Debug.Log($"Acusado: {selectedPassenger.Passenger.Id}");
+        }
 
+        // O Close() já vai cuidar de desligar o highlight e fechar o painel
         Close();
     }
 }
