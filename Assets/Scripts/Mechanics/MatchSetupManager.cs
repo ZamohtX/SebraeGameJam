@@ -14,8 +14,14 @@ public class MatchSetupManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null) Instance = this;
-        else Destroy(gameObject);
+        if (Instance == null) 
+        {
+            Instance = this;
+        }
+        else 
+        {
+            Destroy(gameObject);
+        }
     }
 
     // Inicializa a partida escolhendo as regras e identificando o ladrão
@@ -65,7 +71,7 @@ public class MatchSetupManager : MonoBehaviour
         if (Random.value <= 0.15f && thiefPassenger.Status != PassengerStatus.Robbed)
         {
             thiefPassenger.Status = PassengerStatus.Robbed;
-            Debug.Log($"<color=yellow>[BLEFE]</color> O Ladrão ({thiefPassenger.Id}) fingiu ser uma vítima nesta rodada!");
+            Debug.Log("<color=yellow>[BLEFE]</color> O Ladrão (" + thiefPassenger.Id + ") fingiu ser uma vítima nesta rodada!");
             // TODO: Disparar feedback visual na UI de que o "Ladrão" foi roubado
             return;
         }
@@ -86,12 +92,12 @@ public class MatchSetupManager : MonoBehaviour
             Passenger victim = possibleTargets[Random.Range(0, possibleTargets.Count)];
             victim.Status = PassengerStatus.Robbed;
 
-            Debug.Log($"<color=red>[ROUBO]</color> O ladrão usou a regra {ruleToUse} e roubou o passageiro {victim.Id} na posição ({victim.GridX}, {victim.GridY})");
+            Debug.Log("<color=red>[ROUBO]</color> O ladrão usou a regra " + ruleToUse + " e roubou o passageiro " + victim.Id + " na posição (" + victim.GridX + ", " + victim.GridY + ")");
             // TODO: Atualizar o visual do passageiro roubado na tela
         }
         else
         {
-            Debug.Log($"[TURNO] O ladrão tentou usar a regra {ruleToUse}, mas não encontrou nenhuma vítima válida disponível.");
+            Debug.Log("[TURNO] O ladrão tentou usar a regra " + ruleToUse + ", mas não encontrou nenhuma vítima válida disponível.");
         }
     }
 }
