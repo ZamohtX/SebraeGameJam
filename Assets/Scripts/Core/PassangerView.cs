@@ -1,15 +1,28 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class PassengerView : MonoBehaviour
+public class PassengerView : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField]
     private SpriteRenderer spriteRenderer;
 
-    private Passenger passenger;
+    public Passenger Passenger { get; private set; }
 
+    [SerializeField]
+    private BoxCollider2D boxCollider;
+
+
+    private void Awake()
+    {
+        if (boxCollider == null)
+            boxCollider = GetComponent<BoxCollider2D>();
+
+        if (spriteRenderer == null)
+            spriteRenderer = GetComponent<SpriteRenderer>();
+    }
     public void Initialize(Passenger passenger, SpriteManager spriteManager)
     {
-        this.passenger = passenger;
+        this.Passenger = passenger;
 
         spriteRenderer.sprite =
             spriteManager.GetSprite(passenger.SpriteId);
@@ -22,10 +35,30 @@ public class PassengerView : MonoBehaviour
             passenger.GridY,
             0
         );
+
+        UpdateCollider();
+    }
+
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log($"Clique em {Passenger.Id}");
+
+        PassengerActionUI.Instance.Open(this);
     }
 
     public Passenger GetPassenger()
     {
-        return passenger;
+        return Passenger;
+    }
+
+    private void UpdateCollider()
+    {
+        if (boxCollider == null || spriteRenderer.sprite == null)
+            return;
+        boxCollider.size =
+            spriteRenderer.sprite.bounds.size;
+
+        boxCollider.offset =
+            spriteRenderer.sprite.bounds.center;
     }
 }
