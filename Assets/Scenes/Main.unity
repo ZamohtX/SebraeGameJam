@@ -491,7 +491,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 209126839}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 76155605}
+        m_TargetAssemblyTypeName: PassengerActionUI, Assembly-CSharp
+        m_MethodName: Close
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &209126839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1442,10 +1454,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57f455914a5da0ae59a0b3cfcffd9ec2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
-  isPaused: 0
-  pauseMenuUI: {fileID: 0}
+  gridWidth: 4
+  gridHeight: 5
   spriteManager: {fileID: 1303653060}
   rulesPanelUI: {fileID: 787426613}
+  matchSetupManager: {fileID: 1008730677}
 --- !u!4 &709564000
 Transform:
   m_ObjectHideFlags: 0
@@ -2058,7 +2071,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 950499612}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 76155605}
+        m_TargetAssemblyTypeName: PassengerActionUI, Assembly-CSharp
+        m_MethodName: Accuse
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &950499612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2102,6 +2127,50 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1905981919917318625, guid: 07771707fddbf274b9d22f0b1476a690, type: 3}
   m_PrefabInstance: {fileID: 913241246}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1008730676
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1008730678}
+  - component: {fileID: 1008730677}
+  m_Layer: 0
+  m_Name: MatchSetupManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1008730677
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008730676}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 697558ad0f18e8b90b6f610919a0f08a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MatchSetupManager
+--- !u!4 &1008730678
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1008730676}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.33702, y: -0.13783, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1047635321 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1905981919917318625, guid: 07771707fddbf274b9d22f0b1476a690, type: 3}
@@ -2497,11 +2566,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SpriteManager
   passengerSprites:
+  - {fileID: -2113232896193769741, guid: 777b47e8ae31b594e933e01729fd4b2a, type: 3}
   - {fileID: -2113232896193769741, guid: 1ae296a2e88c64145a029fe42620878b, type: 3}
-  clothingColors:
-  - {r: 0.8792453, g: 0, b: 0, a: 1}
-  - {r: 0.13417183, g: 0.4943396, b: 0.062491976, a: 1}
-  - {r: 0.7646417, g: 0.8113208, b: 0.09643998, a: 1}
+  - {fileID: 5006419361970195700, guid: c2f72d4752cfc2f4f99daf810a990a25, type: 3}
+  - {fileID: 8563928273694069139, guid: ff135b52581102a4684f78be79681c4d, type: 3}
+  clothingColors: []
 --- !u!4 &1303653061
 Transform:
   m_ObjectHideFlags: 0
@@ -3410,3 +3479,4 @@ SceneRoots:
   - {fileID: 1230556613}
   - {fileID: 259847490}
   - {fileID: 1948907969}
+  - {fileID: 1008730678}

@@ -81,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 20
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2113232896193769741, guid: 777b47e8ae31b594e933e01729fd4b2a, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -260,4 +260,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BusSeatView
   gridX: 0
   gridY: 0
-  passengerView: {fileID: 0}
+  passengerView: {fileID: 4422362270985456220}

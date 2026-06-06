@@ -32,7 +32,7 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
         if (Passenger == null || spriteManager == null || spriteRenderer == null) return;
 
         spriteRenderer.sprite = spriteManager.GetSprite(Passenger.SpriteId);
-        spriteRenderer.color = spriteManager.GetColor(Passenger.ClothingColorId);
+        //spriteRenderer.color = spriteManager.GetColor(Passenger.ClothingColorId);
     }
 
     //Atualização dinâmica do collider para o clique funcionar no tamanho certo do sprite

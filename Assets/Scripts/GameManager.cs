@@ -38,7 +38,6 @@ public class GameManager : MonoBehaviour
         if (!registeredSeats.Contains(seat))
         {
             registeredSeats.Add(seat);
-            Debug.Log($" Assento: {seat.GridX} | {seat.GridY}");
         }
     }
 
@@ -69,10 +68,10 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("Nenhuma cadeira foi registrada! Verifique se as cadeiras possuem o componente BusSeatView.");
             return;
         }
+        int amount = Random.Range(15, 20);
+        int thiefIndex = Random.Range(0, amount);
 
-        int thiefIndex = Random.Range(0, registeredSeats.Count);
-
-        for (int i = 0; i < registeredSeats.Count; i++)
+        for (int i = 0; i < amount; i++)
         {
             BusSeatView seat = registeredSeats[i];
 

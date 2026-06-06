@@ -35,6 +35,7 @@ public class MatchSetupManager : MonoBehaviour
             Debug.LogError("[CRÍTICO] Nenhum ladrão foi definido no Spawn de passageiros!");
             return;
         }
+        Debug.Log($"Ladrão encontrado: {thiefPassenger}");
 
         // 2. Sorteia 3 regras únicas das 8 disponíveis (excluindo defeitos ou repetidas)
         SelectRandomRules();
@@ -75,7 +76,6 @@ public class MatchSetupManager : MonoBehaviour
             // TODO: Disparar feedback visual na UI de que o "Ladrão" foi roubado
             return;
         }
-
         // Caso não blefe, ele escolhe uma regra ativa aleatoriamente para cometer o roubo
         ThiefActionRule ruleToUse = activeRules[Random.Range(0, activeRules.Count)];
         
