@@ -1,5 +1,5 @@
-using UnityEngine;
-using UnityEngine.SceneManagement;
+
+using System.Runtime.CompilerServices;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
 
     [Header("UI References")]
     [SerializeField] private GameObject pauseMenuUI;
+    
 
     private void Awake()
     {
@@ -23,6 +24,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
     }
 
     private void Update()
