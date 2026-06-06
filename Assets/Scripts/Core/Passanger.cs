@@ -16,6 +16,8 @@ public class Passenger
     public int SpriteId { get; private set; }
     public int ClothingColorId { get; private set; }
 
+    public PassengerStatus PassengerStatus { get; private set; }
+
     // Construtor para inicializar o passageiro com suas características visuais e posição
     public Passenger(string id, int x, int y, int spriteId, int colorId)
     {

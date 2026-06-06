@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static ThiefTargetCalculator;
 
 public class GameManager : MonoBehaviour
 {
@@ -17,6 +19,8 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private PassengerView passengerPrefab;
 
+    public BusGrid BusGrid { get; private set; }
+
     private void Awake()
     {
         // Padrão Singleton para garantir que só exista um GameManager
@@ -32,15 +36,53 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        for (int i = 0; i < 10; i++)
+        BusGrid = new BusGrid(4, 11);
+
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    Passenger passenger =
+        //        CreateRandomPassenger(i, 0);
+
+        //    PassengerView view =
+        //        Instantiate(passengerPrefab);
+
+        //    view.Initialize(passenger, spriteManager);
+        //}
+
+        Passenger thief = new Passenger("T", 1, 5, 0, 0);
+        thief.Status = PassengerStatus.Thief;
+
+        Passenger p1 = new Passenger("P1", 0, 4, 0, 0);
+        Passenger p2 = new Passenger("P2", 2, 6, 0, 0);
+        Passenger p3 = new Passenger("P3", 1, 9, 0, 0);
+        Passenger p4 = new Passenger("P4", 3, 5, 0, 0);
+        Passenger p5 = new Passenger("P5", 2, 7, 0, 0);
+        Passenger p6 = new Passenger("P6", 1, 8, 0, 0);
+        p6.Status = PassengerStatus.Robbed;
+
+        BusGrid.AddPassenger(thief, 1, 5);
+        BusGrid.AddPassenger(p1, 0, 4);
+        BusGrid.AddPassenger(p2, 2, 6);
+        BusGrid.AddPassenger(p3, 1, 9);
+        BusGrid.AddPassenger(p4, 3, 5);
+        BusGrid.AddPassenger(p5, 2, 7);
+        BusGrid.AddPassenger(p6, 1, 8);
+
+        foreach (ThiefActionRule rule in
+         System.Enum.GetValues(typeof(ThiefActionRule)))
         {
-            Passenger passenger =
-                CreateRandomPassenger(i, 0);
+            Debug.Log($"--- {rule} ---");
 
-            PassengerView view =
-                Instantiate(passengerPrefab);
+            List<Passenger> targets =
+                ThiefTargetCalculator.CalculatePossibleTargets(
+                    BusGrid,
+                    new Vector2Int(thief.GridX, thief.GridY),
+                    rule);
 
-            view.Initialize(passenger, spriteManager);
+            foreach (Passenger p in targets)
+            {
+                Debug.Log($"{p.Id}");
+            }
         }
     }
 
