@@ -1,58 +1,30 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class PassengerView : MonoBehaviour, IPointerClickHandler
+
+public class PassangerView : MonoBehaviour, IPointerClickHandler
 {
-    [SerializeField]
-    private SpriteRenderer spriteRenderer;
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private BoxCollider2D boxCollider;
 
     public Passenger Passenger { get; private set; }
-
-    [SerializeField]
-    private BoxCollider2D boxCollider;
-
+    private SpriteManager spriteManager;
 
     private void Awake()
     {
-        if (boxCollider == null)
-            boxCollider = GetComponent<BoxCollider2D>();
-
-        if (spriteRenderer == null)
-            spriteRenderer = GetComponent<SpriteRenderer>();
+        if (boxCollider == null) boxCollider = GetComponent<BoxCollider2D>();
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    public void Initialize(Passenger passenger, SpriteManager spriteManager)
+
+    public void Initialize(Passenger passenger, SpriteManager manager)
     {
         this.Passenger = passenger;
+        this.spriteManager = manager;
 
-        spriteRenderer.sprite =
-            spriteManager.GetSprite(passenger.SpriteId);
-
-        spriteRenderer.color =
-            spriteManager.GetColor(passenger.ClothingColorId);
-
-        UpdateCollider();
+        // Ativa o gameObject Caso estivesse com assento vazio
+        gameObject.SetActive(true);
+        
+        UpdateVisual();
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        Debug.Log($"Clique em {Passenger.Id}");
-
-        PassengerActionUI.Instance.Open(this);
-    }
-
-    public Passenger GetPassenger()
-    {
-        return Passenger;
-    }
-
-    private void UpdateCollider()
-    {
-        if (boxCollider == null || spriteRenderer.sprite == null)
-            return;
-        boxCollider.size =
-            spriteRenderer.sprite.bounds.size;
-
-        boxCollider.offset =
-            spriteRenderer.sprite.bounds.center;
-    }
 }
