@@ -30,12 +30,6 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
         spriteRenderer.color =
             spriteManager.GetColor(passenger.ClothingColorId);
 
-        transform.position = new Vector3(
-            passenger.GridX,
-            passenger.GridY,
-            0
-        );
-
         UpdateCollider();
     }
 

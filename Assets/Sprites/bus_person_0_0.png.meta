@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: cc53e4a77103b2e4991c27a09aa6b9fd
+guid: 777b47e8ae31b594e933e01729fd4b2a
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1946326234231391151
-    second: 2-Fogo_0
+      213: -2113232896193769741
+    second: bus_person_0_0_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -100,13 +100,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: 2-Fogo_0
+      name: bus_person_0_0_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 1080
-        height: 1350
+        width: 574
+        height: 787
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -115,8 +115,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 15c3d9f1a924df4e0800000000000000
-      internalID: -1946326234231391151
+      spriteID: 3fe43b690e94ca2e0800000000000000
+      internalID: -2113232896193769741
       vertices: []
       indices: 
       edges: []
@@ -135,7 +135,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      2-Fogo_0: -1946326234231391151
+      bus_person_0_0_0: -2113232896193769741
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
