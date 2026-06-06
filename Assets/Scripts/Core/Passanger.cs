@@ -1,3 +1,5 @@
+using Unity.VisualScripting;
+
 public enum PassengerStatus
 {
     Intact,    // Inteiro/Não roubado
@@ -17,6 +19,7 @@ public class Passenger
     // Construtor para inicializar o passageiro com suas características visuais e posição
     public Passenger(string id, int x, int y, int spriteId, int colorId)
     {
+        
         Id = id;
         GridX = x;
         GridY = y;

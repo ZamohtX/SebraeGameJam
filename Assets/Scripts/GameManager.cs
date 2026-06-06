@@ -11,6 +11,12 @@ public class GameManager : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private GameObject pauseMenuUI;
 
+    [SerializeField]
+    private SpriteManager spriteManager;
+
+    [SerializeField]
+    private PassengerView passengerPrefab;
+
     private void Awake()
     {
         // Padrão Singleton para garantir que só exista um GameManager
@@ -24,6 +30,20 @@ public class GameManager : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    private void Start()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            Passenger passenger =
+                CreateRandomPassenger(i, 0);
+
+            PassengerView view =
+                Instantiate(passengerPrefab);
+
+            view.Initialize(passenger, spriteManager);
+        }
+    }
+
 
     private void Update()
     {
@@ -35,6 +55,17 @@ public class GameManager : MonoBehaviour
             else
                 PauseGame();
         }
+    }
+
+    public Passenger CreateRandomPassenger(int x, int y)
+    {
+        return new Passenger(
+            System.Guid.NewGuid().ToString(),
+            x,
+            y,
+            spriteManager.GetRandomSpriteId(),
+            spriteManager.GetRandomColorId()
+        );
     }
 
     public void PauseGame()
