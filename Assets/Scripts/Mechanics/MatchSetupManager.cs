@@ -1,83 +1,103 @@
 using System.Collections.Generic;
+using UnityEngine;
+using static ThiefTargetCalculator;
 
-public class MatchSetupManager
+public class MatchSetupManager : MonoBehaviour
 {
-    private System.Random random;
+    public static MatchSetupManager Instance { get; private set; }
 
-    public MatchSetupManager()
+    [Header("Regras da Partida")]
+    private List<ThiefActionRule> activeRules = new List<ThiefActionRule>();
+    
+    // Armazena o passageiro que √© o ladr√£o para acesso r√°pido da IA
+    private Passenger thiefPassenger;
+
+    private void Awake()
     {
-        random = new System.Random();
+        if (Instance == null) 
+        {
+            Instance = this;
+        }
+        else 
+        {
+            Destroy(gameObject);
+        }
     }
 
-    // Configura a partida garantindo a lotaÁ„o mÌnima e elegendo o ladr„o
-    public void SetupMatch(BusGrid busGrid, int minPassengers = 35)
+    // Inicializa a partida escolhendo as regras e identificando o ladr√£o
+    public void InitializeMatch(List<Passenger> allPassengers, RulesPanelUI rulesPanel)
     {
-        //  Mapeia todos os assentos fÌsicos existentes no Ùnibus
-        List<KeyValuePair<int, int>> availableSeats = GetAvailableSeats(busGrid);
-        int totalSeats = availableSeats.Count;
+        // 1. Encontra quem √© o ladr√£o na lista de passageiros gerados
+        thiefPassenger = allPassengers.Find(p => p.Status == PassengerStatus.Thief);
 
-        // Garante que o Ùnibus criado tem tamanho suficiente
-        if (totalSeats < minPassengers)
+        if (thiefPassenger == null)
         {
-            minPassengers = totalSeats;
+            Debug.LogError("[CR√çTICO] Nenhum ladr√£o foi definido no Spawn de passageiros!");
+            return;
         }
 
-        // Define dinamicamente quantos passageiros v„o spawnar nesta partida
-        int passengersToSpawn = random.Next(minPassengers, totalSeats + 1);
+        // 2. Sorteia 3 regras √∫nicas das 8 dispon√≠veis (excluindo defeitos ou repetidas)
+        SelectRandomRules();
 
-        // Loop de distribuiÁ„o e criaÁ„o dos passageiros
-        for (int i = 0; i < passengersToSpawn; i++)
+        // 3. Atualiza a UI para mostrar as regras sorteadas ao jogador
+        if (rulesPanel != null && activeRules.Count >= 3)
         {
-            // Escolhe um assento aleatÛrio da lista de assentos vazios
-            int seatIndex = random.Next(availableSeats.Count);
-            KeyValuePair<int, int> selectedSeat = availableSeats[seatIndex];
-
-            // Remove o assento da lista para que outra pessoa n„o sente no mesmo lugar
-            availableSeats.RemoveAt(seatIndex);
-
-            // Sorteia a variaÁ„o visual (1 a 4) e a cor da roupa (1 a 6)
-            int randomSpriteId = random.Next(1, 5);
-            int randomColorId = random.Next(1, 7);
-
-            string passengerId = "Passenger_" + i;
-            Passenger passenger = new Passenger(passengerId, selectedSeat.Key, selectedSeat.Value, randomSpriteId, randomColorId);
-
-            // Insere o passageiro na matriz lÛgica do Ùnibus
-            busGrid.AddPassenger(passenger, selectedSeat.Key, selectedSeat.Value);
+            rulesPanel.ShowRules(activeRules[0], activeRules[1], activeRules[2]);
         }
-
-        // Elege secretamente o ladrao da partida
-        SelectRandomThief(busGrid);
     }
 
-    // Varre a matriz em busca de assentos vazios
-    private List<KeyValuePair<int, int>> GetAvailableSeats(BusGrid busGrid)
+    private void SelectRandomRules()
     {
-        List<KeyValuePair<int, int>> seats = new List<KeyValuePair<int, int>>();
+        activeRules.Clear();
+        List<ThiefActionRule> allAvailableRules = new List<ThiefActionRule>(
+            (ThiefActionRule[])System.Enum.GetValues(typeof(ThiefActionRule))
+        );
 
-        for (int x = 0; x < busGrid.Width; x++)
+        // Sorteia 3 regras distintas
+        while (activeRules.Count < 3 && allAvailableRules.Count > 0)
         {
-            for (int y = 0; y < busGrid.Height; y++)
-            {
-                if (busGrid.GetPassengerAt(x, y) == null)
-                {
-                    seats.Add(new KeyValuePair<int, int>(x, y));
-                }
-            }
+            int randomIndex = Random.Range(0, allAvailableRules.Count);
+            activeRules.Add(allAvailableRules[randomIndex]);
+            allAvailableRules.RemoveAt(randomIndex); // Evita repetir a mesma regra
         }
-
-        return seats;
     }
 
-    // Escolhe um dos passageiros gerados para ser o ladr„o
-    private void SelectRandomThief(BusGrid busGrid)
+    // Executado a cada parada do √¥nibus (Turno do Ladr√£o)
+    public void ExecuteThiefTurn(BusGrid busGrid)
     {
-        List<Passenger> allPassengers = busGrid.GetAllPassengers();
+        if (thiefPassenger == null) return;
 
-        if (allPassengers.Count > 0)
+        // Regra Especial (*): 15% de chance de fingir que foi roubado (se j√° n√£o tiver sido)
+        if (Random.value <= 0.15f && thiefPassenger.Status != PassengerStatus.Robbed)
         {
-            int thiefIndex = random.Next(allPassengers.Count);
-            allPassengers[thiefIndex].Status = PassengerStatus.Thief;
+            thiefPassenger.Status = PassengerStatus.Robbed;
+            Debug.Log("<color=yellow>[BLEFE]</color> O Ladr√£o (" + thiefPassenger.Id + ") fingiu ser uma v√≠tima nesta rodada!");
+            // TODO: Disparar feedback visual na UI de que o "Ladr√£o" foi roubado
+            return;
+        }
+
+        // Caso n√£o blefe, ele escolhe uma regra ativa aleatoriamente para cometer o roubo
+        ThiefActionRule ruleToUse = activeRules[Random.Range(0, activeRules.Count)];
+        
+        // Calcula os alvos poss√≠veis usando a classe est√°tica que voc√™s criaram
+        Vector2Int thiefPos = new Vector2Int(thiefPassenger.GridX, thiefPassenger.GridY);
+        List<Passenger> possibleTargets = ThiefTargetCalculator.CalculatePossibleTargets(busGrid, thiefPos, ruleToUse);
+
+        // Filtra para garantir que ele n√£o roube quem j√° foi roubado ou a si mesmo
+        possibleTargets.RemoveAll(p => p.Status == PassengerStatus.Robbed || p.Status == PassengerStatus.Thief);
+
+        if (possibleTargets.Count > 0)
+        {
+            // Escolhe uma v√≠tima aleat√≥ria entre os alvos v√°lidos da regra
+            Passenger victim = possibleTargets[Random.Range(0, possibleTargets.Count)];
+            victim.Status = PassengerStatus.Robbed;
+
+            Debug.Log("<color=red>[ROUBO]</color> O ladr√£o usou a regra " + ruleToUse + " e roubou o passageiro " + victim.Id + " na posi√ß√£o (" + victim.GridX + ", " + victim.GridY + ")");
+            // TODO: Atualizar o visual do passageiro roubado na tela
+        }
+        else
+        {
+            Debug.Log("[TURNO] O ladr√£o tentou usar a regra " + ruleToUse + ", mas n√£o encontrou nenhuma v√≠tima v√°lida dispon√≠vel.");
         }
     }
 }

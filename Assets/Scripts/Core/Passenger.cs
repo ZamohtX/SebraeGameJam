@@ -1,8 +1,8 @@
 public enum PassengerStatus
 {
-    Intact,    // Inteiro / Não roubado
+    Intact,    // Inteiro/Não roubado
     Robbed,    // Roubado
-    Thief      // É o ladrão da rodada
+    Thief      // É o ladrão da partida
 }
 
 public class Passenger
@@ -21,6 +21,6 @@ public class Passenger
         GridY = y;
         SpriteId = spriteId;
         ClothingColorId = colorId;
-        Status = PassengerStatus.Intact;
+        Status = PassengerStatus.Intact; 
     }
 }
