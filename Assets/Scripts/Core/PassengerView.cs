@@ -1,0 +1,55 @@
+using UnityEngine;
+using UnityEngine.EventSystems;
+
+public class PassengerView : MonoBehaviour, IPointerClickHandler
+{
+    [SerializeField] private SpriteRenderer spriteRenderer;
+    [SerializeField] private BoxCollider2D boxCollider;
+
+    public Passenger Passenger { get; private set; }
+    private SpriteManager spriteManager;
+
+    private void Awake()
+    {
+        if (boxCollider == null) boxCollider = GetComponent<BoxCollider2D>();
+        if (spriteRenderer == null) spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    public void Initialize(Passenger passenger, SpriteManager manager)
+    {
+        this.Passenger = passenger;
+        this.spriteManager = manager;
+
+        gameObject.SetActive(true);
+        
+        UpdateVisual();
+        UpdateCollider();
+    }
+
+    // CORRIGIDO: Implementação do UpdateVisual que estava faltando
+    public void UpdateVisual()
+    {
+        if (Passenger == null || spriteManager == null || spriteRenderer == null) return;
+
+        spriteRenderer.sprite = spriteManager.GetSprite(Passenger.SpriteId);
+        spriteRenderer.color = spriteManager.GetColor(Passenger.ClothingColorId);
+    }
+
+    //Atualização dinâmica do collider para o clique funcionar no tamanho certo do sprite
+    private void UpdateCollider()
+    {
+        if (boxCollider == null || spriteRenderer.sprite == null) return;
+        
+        boxCollider.size = spriteRenderer.sprite.bounds.size;
+        boxCollider.offset = spriteRenderer.sprite.bounds.center;
+    }
+
+    // CORRIGIDO: Retornado o clique para abrir a UI de acusação
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (PassengerActionUI.Instance != null)
+        {
+            PassengerActionUI.Instance.Open(this);
+        }
+    }
+}

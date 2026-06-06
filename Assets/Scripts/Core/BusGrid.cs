@@ -31,7 +31,7 @@ public class BusGrid
     }
 
     // Busca o passageiro em uma coordenada especifica
-    public Passenger GetPassangerAt(int x, int y)
+    public Passenger GetPassengerAt(int x, int y)
     {
         if (IsPositionOutOfBounds(x, y))
         {

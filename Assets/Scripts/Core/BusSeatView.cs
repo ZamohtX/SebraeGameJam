@@ -2,24 +2,22 @@ using UnityEngine;
 
 public class BusSeatView : MonoBehaviour
 {
-    [Header("Coordenadas no onibus")]
+    [Header("Coordenadas no ônibus")]
     [SerializeField] private int gridX;
-    [SerializeFIeld] private int gridY;
+    [SerializeField] private int gridY; // CORRIGIDO: SerializeField com minúsculo
 
-    [Header("Referencia visual do passageiro")]
-    [SerializeField] private PassangerView passangerView;
+    [Header("Referência visual do passageiro")]
+    [SerializeField] private PassengerView passengerView; // PADRONIZADO: com 'e'
 
     public int GridX => gridX;
     public int GridY => gridY;
-    public PassangerView PassangerView => passangerView;
+    public PassengerView PassengerView => passengerView;
 
     private void Start()
     {
-        // Registra automaticamente esta cadeira no GameManager assim que a cena carrega
         if (GameManager.Instance != null)
         {
-            GameManager.Instance.RegisterBusSeat(this);
+            GameManager.Instance.RegisterSeat(this);
         }
     }
-
 }

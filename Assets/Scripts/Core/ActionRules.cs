@@ -63,7 +63,7 @@ public static class ThiefTargetCalculator
         int x,
         int y)
     {
-        Passenger passenger = grid.GetPassangerAt(x, y);
+        Passenger passenger = grid.GetPassengerAt(x, y);
 
         if (isValid(passenger))
         {
@@ -191,7 +191,7 @@ public static class ThiefTargetCalculator
         return result;
     }
 
-    private static List<Passenger> GetArea(
+ private static List<Passenger> GetArea(
         BusGrid grid,
         Vector2Int pos,
         int width = 3,
@@ -199,18 +199,19 @@ public static class ThiefTargetCalculator
     {
         List<Passenger> result = new();
 
-        for (int dx = 0; dx < width; dx++)
+        // Faz uma varredura de -1 a +1 ao redor da posição do ladrão (Quadrado 3x3)
+        for (int dx = -1; dx <= 1; dx++)
         {
-            for (int dy = 0; dy < height; dy++)
+            for (int dy = -1; dy <= 1; dy++)
             {
                 if (dx == 0 && dy == 0)
-                    continue;
+                    continue; // Pula o próprio ladrão
 
                 AddIfOccupied(
                     grid,
                     result,
                     pos.x + dx,
-                    pos.y - dy);
+                    pos.y + dy); 
             }
         }
 
