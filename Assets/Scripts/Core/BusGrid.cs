@@ -62,6 +62,4 @@ public class BusGrid
     {
         return x < 0 || x >= Width || y < 0 || y >= Height;
     }
-
-
 }   
