@@ -63,7 +63,7 @@ public static class ThiefTargetCalculator
         int x,
         int y)
     {
-        Passenger passenger = grid.GetPassangerAt(x, y);
+        Passenger passenger = grid.GetPassengerAt(x, y);
 
         if (isValid(passenger))
         {
