@@ -200,15 +200,14 @@ public class GameManager : MonoBehaviour
         {
             gameResultUI.ShowFinalResult(false, currentRound, thiefId);
         }
-    }
+    }    
 
     private void displayMessage(string message)
     {
-        if (messagePanel != null && messageText != null)
-        {
-            messageText.text = message;
-            messagePanel.SetActive(true);
-        }
+        if (messagePanel == null || messageText == null) return;
+        
+        messageText.text = message;
+        messagePanel.SetActive(true);
     }
 
     public void RestartScene()
