@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,14 +13,15 @@ public class GameManager : MonoBehaviour
     private int currentRound = 1;
     private const int MAX_ROUNDS = 5;
 
+    [Header("Referências de UI Internas")]
+    [SerializeField] private GameObject messagePanel; 
+    [SerializeField] private TMPro.TMP_Text messageText;
+
     [Header("Referências Técnicas")]
     [SerializeField] private SpriteManager spriteManager;
     [SerializeField] private RulesPanelUI rulesPanelUI;
     [SerializeField] private MatchSetupManager matchSetupManager; 
     [SerializeField] private GameResultUI gameResultUI;
-
-    [SerializeField] private GameObject messagePanel; 
-    [SerializeField] private TextMeshProUGUI messageText;
 
     public BusGrid BusGrid { get; private set; }
     public bool isPaused { get; private set; } = false;
@@ -41,6 +41,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Função de registro usada pelo BusSeatView ao iniciar a cena
     public void RegisterSeat(BusSeatView seat)
     {
         if (!registeredSeats.Contains(seat))
@@ -54,22 +55,21 @@ public class GameManager : MonoBehaviour
         currentRound = 1;
         BusGrid = new BusGrid(gridWidth, gridHeight);
 
+        // Instancia e posiciona os passageiros logicamente e visualmente
         PopulateBus();
 
+        // Tenta buscar o gerenciador de partidas se não foi arrastado no Inspector
         if (matchSetupManager == null)
         {
             matchSetupManager = FindFirstObjectByType<MatchSetupManager>();
         }
 
+        // Inicializa as regras e a IA do Ladrão para o Round 1
         if (matchSetupManager != null)
         {
             matchSetupManager.InitializeMatch(BusGrid.GetAllPassengers(), rulesPanelUI);
-            
-            // Primeiro roubo do jogo (Round 1)
             matchSetupManager.ExecuteThiefTurn(BusGrid);
         }
-
-        if (AudioManager.Instance != null)  AudioManager.Instance.StartBus();
     }
 
     private void PopulateBus()
@@ -98,7 +98,6 @@ public class GameManager : MonoBehaviour
             if (i == thiefIndex)
             {
                 passenger.Status = PassengerStatus.Thief;
-                // CORRIGIDO: Tag 'cyan' digitada corretamente
                 Debug.Log($"<color=cyan>[DEV]</color> Ladrão gerado no ID: {uniqueId} na posição ({seat.GridX}, {seat.GridY})");
             }
 
@@ -112,6 +111,16 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Exibe textos informativos na sua caixa de mensagens nativa
+    private void displayMessage(string message)
+    {
+        if (messagePanel == null || messageText == null) return;
+        
+        messageText.text = message;
+        messagePanel.SetActive(true);
+    }
+
+    // Fluxo acionado pelo botão "Acusar" da interface do passageiro
     public void CheckAccusation(Passenger accusedPassenger)
     {
         if (accusedPassenger.Status == PassengerStatus.Thief)
@@ -120,8 +129,10 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            // Errou: O inocente assume o status de expulso
             accusedPassenger.Status = PassengerStatus.Expelled;
 
+            // Remove o sprite do passageiro expulso do ônibus antes do fade voltar
             UpdateExpelledPassengersVisual();
             
             currentRound++;
@@ -141,7 +152,6 @@ public class GameManager : MonoBehaviour
     {
         foreach (var seat in registeredSeats)
         {
-            // CORRIGIDO: Adicionada checagem defensiva extra para evitar quebras
             if (seat.PassengerView != null && seat.PassengerView.gameObject.activeSelf && seat.PassengerView.Passenger != null)
             {
                 if (seat.PassengerView.Passenger.Status == PassengerStatus.Expelled)
@@ -152,39 +162,81 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Coroutine para rounds normais (Erro de acusação)
     private System.Collections.IEnumerator TransitionToNextRound()
     {
-        displayMessage("O passageiro acusado é expulso do ônibus!");
-        Debug.Log("[FADE] Entrando em tela preta... Onibus parando no ponto.");
+        // 1. FADE IN (Transição simulada para a tela preta)
+        Debug.Log("[FADE] Entrando em tela preta... Ônibus parando no ponto.");
         yield return new WaitForSeconds(1.0f);
 
-        if (gameResultUI != null)
+        // 2. CONFIGURA O CENÁRIO (Injeta o PNG do ponto de ônibus atual no fundo)
+        if (RouteManager.Instance != null)
         {
-            gameResultUI.ShowRoundReport(currentRound);
+            RouteManager.Instance.ShowCurrentStation();
         }
 
-        // Executa o roubo da próxima rodada de forma segura
+        // 3. EXIBE A MENSAGEM NA CAIXA DE TEXTO NATIVA
+        displayMessage("Houve outro roubo no ônibus!");
+
+        // 4. TEMPO DE LEITURA (Jogador visualiza a parada de Maceió e lê o texto)
+        yield return new WaitForSeconds(3.5f);
+
+        // 5. PROCESSA O PRÓXIMO ROUBO (Acontece escondido antes do fade out)
         if (matchSetupManager != null)
         {
             matchSetupManager.ExecuteThiefTurn(BusGrid);
         }
 
-        yield return new WaitForSeconds(2.5f);
+        // 6. SEGUNDO FADE IN (Preparando para voltar ao ônibus)
+        Debug.Log("[FADE] Entrando em tela preta para voltar para dentro do ônibus.");
+        yield return new WaitForSeconds(1.0f);
 
-        Debug.Log("[FADE] Saindo da tela preta... Proximo round começou.");
-        // TODO: Desativar painel de round report ou disparar animação de fade out aqui
+        // 7. DESATIVA O CENÁRIO E AVANÇA A IMAGEM PARA A PRÓXIMA PARADA
+        if (RouteManager.Instance != null)
+        {
+            RouteManager.Instance.HideStation(); 
+            RouteManager.Instance.AdvanceToNextStation(); 
+        }
+
+        if (messagePanel != null)
+        {
+            messagePanel.SetActive(false);
+        }
+
+        Debug.Log("[FADE] Saindo da tela preta... Próximo round começou.");
     }
 
     private void ProcessWin()
     {
         int savedHighScore = SaveManager.LoadHighScore();
 
+        // Se for menor número de rodadas, atualiza o recorde
         if (savedHighScore == 0 || currentRound < savedHighScore)
         {
             SaveManager.SaveGameProgress(1, currentRound);
             Debug.Log($"[HIGHSCORE] Novo recorde estabelecido: {currentRound} rodadas!");
+        }  
+
+        StartCoroutine(VictoryTransitionCoroutine());
+    }
+
+    // Coroutine para o fluxo de acerto (Vitória)
+    private System.Collections.IEnumerator VictoryTransitionCoroutine()
+    {
+        Debug.Log("[FADE] Entrando em tela preta... Transicionando para a vitória.");
+        yield return new WaitForSeconds(1.0f);
+
+        if (RouteManager.Instance != null)
+        {
+            RouteManager.Instance.ShowCurrentStation();
         }
 
+        int bestScore = SaveManager.LoadHighScore();
+        displayMessage($"<color=green><b>LADRÃO CAPTURADO!</b></color>\n\nVocê descobriu o meliante em {currentRound} rodadas nesta parada.\n🏆 Seu melhor recorde: {bestScore} rodadas.");
+
+        yield return new WaitForSeconds(3.0f);
+
+        // Acende o painel final com o botão de reiniciar
         if (gameResultUI != null)
         {
             gameResultUI.ShowFinalResult(true, currentRound);
@@ -202,20 +254,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void displayMessage(string message)
-    {
-        if (messagePanel != null && messageText != null)
-        {
-            messageText.text = message;
-            messagePanel.SetActive(true);
-        }
-    }
-
     public void RestartScene()
     {
         Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
-    } 
+    }
+
+    public void OnBusArrivedAtStation()
+    {
+        if (matchSetupManager != null)
+        {
+            matchSetupManager.ExecuteThiefTurn(BusGrid);
+        }
+    }
 
     public void PauseGame()
     {
