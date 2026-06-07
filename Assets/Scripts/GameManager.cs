@@ -91,8 +91,7 @@ public class GameManager : MonoBehaviour
                 uniqueId,
                 seat.GridX,
                 seat.GridY,
-                spriteManager.GetRandomSpriteId(),
-                spriteManager.GetRandomColorId()
+                spriteManager.GetRandomSpriteId()
             );
 
             if (i == thiefIndex)

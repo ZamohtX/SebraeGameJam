@@ -12,16 +12,13 @@ public class Passenger
     public int GridX { get; set; }
     public int GridY { get; set; }
     public PassengerStatus Status { get; set; }
-    public int SpriteId { get; private set; }
-    public int ClothingColorId { get; private set; }
-
-    public Passenger(string id, int x, int y, int spriteId, int colorId)
+    public int SpriteId { get; set; }
+    public Passenger(string id, int x, int y, int spriteId)
     {
         Id = id;
         GridX = x;
         GridY = y;
         SpriteId = spriteId;
-        ClothingColorId = colorId;
         Status = PassengerStatus.Intact; 
     }
 }

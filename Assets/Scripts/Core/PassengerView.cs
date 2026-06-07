@@ -31,7 +31,10 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
     {
         if (Passenger == null || spriteManager == null || spriteRenderer == null) return;
 
-        spriteRenderer.sprite = spriteManager.GetSprite(Passenger.SpriteId);
+        if (Passenger.Status == PassengerStatus.Intact)
+            spriteRenderer.sprite = spriteManager.GetSprite(Passenger.SpriteId);
+        else if (Passenger.Status == PassengerStatus.Robbed)
+            spriteRenderer.sprite = spriteManager.GetRobbedSprite(Passenger.SpriteId);
         //spriteRenderer.color = spriteManager.GetColor(Passenger.ClothingColorId);
     }
 
@@ -67,5 +70,12 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
             // Volta para a cor padrão do sprite (branco normal)
             spriteRenderer.color = Color.white;
         }
+    }
+
+    public void RobPassenger()
+    {
+        if (Passenger == null) return;
+
+        UpdateVisual();
     }
 }

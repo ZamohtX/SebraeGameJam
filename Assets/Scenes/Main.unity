@@ -3627,7 +3627,11 @@ MonoBehaviour:
   - {fileID: -2113232896193769741, guid: 1ae296a2e88c64145a029fe42620878b, type: 3}
   - {fileID: 5006419361970195700, guid: c2f72d4752cfc2f4f99daf810a990a25, type: 3}
   - {fileID: 8563928273694069139, guid: ff135b52581102a4684f78be79681c4d, type: 3}
-  clothingColors: []
+  robbedSprites:
+  - {fileID: 7371097201287692766, guid: 53022a79c2193f949b98b73154c11d94, type: 3}
+  - {fileID: 6381619213968171514, guid: 7278c568256091745a1c1618ae5090e2, type: 3}
+  - {fileID: 6122463996980464523, guid: d665f0d3d5de95d47854a8941b72f133, type: 3}
+  - {fileID: -3227676695528750830, guid: e9771dd135fffff46a9e984a71ecd052, type: 3}
 --- !u!4 &1303653061
 Transform:
   m_ObjectHideFlags: 0

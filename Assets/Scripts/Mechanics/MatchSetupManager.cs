@@ -8,6 +8,7 @@ public class MatchSetupManager : MonoBehaviour
 
     [Header("Regras da Partida")]
     private List<ThiefActionRule> activeRules = new List<ThiefActionRule>();
+    [SerializeField] private Transform bus;
     
     // Armazena o passageiro que é o ladrão para acesso rápido da IA
     private Passenger thiefPassenger;
@@ -91,6 +92,13 @@ public class MatchSetupManager : MonoBehaviour
             // Escolhe uma vítima aleatória entre os alvos válidos da regra
             Passenger victim = possibleTargets[Random.Range(0, possibleTargets.Count)];
             victim.Status = PassengerStatus.Robbed;
+
+            Transform chairTransform = bus.Find($"chair_{victim.GridX}_{victim.GridY}");
+            if (chairTransform != null)
+            {
+                PassengerView victimView = chairTransform.GetComponentInChildren<PassengerView>();
+                victimView.RobPassenger();
+            }
 
             Debug.Log("<color=red>[ROUBO]</color> O ladrão usou a regra " + ruleToUse + " e roubou o passageiro " + victim.Id + " na posição (" + victim.GridX + ", " + victim.GridY + ")");
             // TODO: Atualizar o visual do passageiro roubado na tela
