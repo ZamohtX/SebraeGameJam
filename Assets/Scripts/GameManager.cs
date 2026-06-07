@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Dynamic;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -38,7 +37,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Função de registro usada pelo BusSeatView
     public void RegisterSeat(BusSeatView seat)
     {
         if (!registeredSeats.Contains(seat))
@@ -50,22 +48,20 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         currentRound = 1;
-
         BusGrid = new BusGrid(gridWidth, gridHeight);
 
-        // Instancia e posiciona os passageiros logicamente e visualmente
         PopulateBus();
 
-        // Tenta buscar o gerenciador de partidas se não foi arrastado no Inspector
         if (matchSetupManager == null)
         {
             matchSetupManager = FindFirstObjectByType<MatchSetupManager>();
         }
 
-        // Inicializa as regras e a IA do Ladrão
         if (matchSetupManager != null)
         {
             matchSetupManager.InitializeMatch(BusGrid.GetAllPassengers(), rulesPanelUI);
+            
+            // Primeiro roubo do jogo (Round 1)
             matchSetupManager.ExecuteThiefTurn(BusGrid);
         }
     }
@@ -77,10 +73,11 @@ public class GameManager : MonoBehaviour
             Debug.LogWarning("Nenhuma cadeira foi registrada! Verifique se as cadeiras possuem o componente BusSeatView.");
             return;
         }
-        int amount = Random.Range(15, 20);
-        int thiefIndex = Random.Range(0, amount);
 
-        for (int i = 0; i < amount; i++)
+        int totalSeats = registeredSeats.Count;
+        int thiefIndex = Random.Range(0, totalSeats);
+
+        for (int i = 0; i < totalSeats; i++)
         {
             BusSeatView seat = registeredSeats[i];
             string uniqueId = System.Guid.NewGuid().ToString().Substring(0, 5);
@@ -95,7 +92,8 @@ public class GameManager : MonoBehaviour
             if (i == thiefIndex)
             {
                 passenger.Status = PassengerStatus.Thief;
-                Debug.Log($"<color=cyanq>[DEV]</color> Ladrão gerado no ID: {uniqueId} na posição ({seat.GridX}, {seat.GridY})");
+                // CORRIGIDO: Tag 'cyan' digitada corretamente
+                Debug.Log($"<color=cyan>[DEV]</color> Ladrão gerado no ID: {uniqueId} na posição ({seat.GridX}, {seat.GridY})");
             }
 
             BusGrid.AddPassenger(passenger, seat.GridX, seat.GridY);
@@ -108,14 +106,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // FLuxo chamado quando o jogador clica no botao acusar
-   public void CheckAccusation(Passenger accusedPassenger)
+    public void CheckAccusation(Passenger accusedPassenger)
     {
         if (accusedPassenger.Status == PassengerStatus.Thief)
         {
             ProcessWin();
         }
-        else{
+        else
+        {
             accusedPassenger.Status = PassengerStatus.Expelled;
 
             UpdateExpelledPassengersVisual();
@@ -130,15 +128,15 @@ public class GameManager : MonoBehaviour
             {
                 StartCoroutine(TransitionToNextRound());
             }
-           
         }
     }
 
     private void UpdateExpelledPassengersVisual()
     {
-        foreach ( var seat in registeredSeats)
+        foreach (var seat in registeredSeats)
         {
-            if (seat.PassengerView != null && seat.PassengerView.Passenger != null)
+            // CORRIGIDO: Adicionada checagem defensiva extra para evitar quebras
+            if (seat.PassengerView != null && seat.PassengerView.gameObject.activeSelf && seat.PassengerView.Passenger != null)
             {
                 if (seat.PassengerView.Passenger.Status == PassengerStatus.Expelled)
                 {
@@ -150,18 +148,15 @@ public class GameManager : MonoBehaviour
 
     private System.Collections.IEnumerator TransitionToNextRound()
     {
-        // Chamar a animação de Fade In aqui
         Debug.Log("[FADE] Entrando em tela preta... Onibus parando no ponto.");
-        yield return new WaitForSeconds(1.0f); // Simula o tempo do Fade
+        yield return new WaitForSeconds(1.0f);
 
-        // Alerta na tela: "Houve outro roubo no onibus"
         if (gameResultUI != null)
         {
-            // mostra a tela informando novo roubo
             gameResultUI.ShowRoundReport(currentRound);
         }
 
-        // Executa o proximo roubo do ladrão por tras dos panos
+        // Executa o roubo da próxima rodada de forma segura
         if (matchSetupManager != null)
         {
             matchSetupManager.ExecuteThiefTurn(BusGrid);
@@ -169,13 +164,12 @@ public class GameManager : MonoBehaviour
 
         yield return new WaitForSeconds(2.5f);
 
-        Debug.Log("Saindo da tela preta... Proximo round começou.");
+        Debug.Log("[FADE] Saindo da tela preta... Proximo round começou.");
+        // TODO: Desativar painel de round report ou disparar animação de fade out aqui
     }
-
 
     private void ProcessWin()
     {
-        // Salva o Highscore
         int savedHighScore = SaveManager.LoadHighScore();
 
         if (savedHighScore == 0 || currentRound < savedHighScore)
@@ -190,7 +184,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     private void ProcessLoss(bool ranOutRounds)
     {
         Passenger trueThief = BusGrid.GetAllPassengers().Find(p => p.Status == PassengerStatus.Thief);
@@ -202,18 +195,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
-    
-
     public void RestartScene()
     {
         Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
     }
 
-
-
-    // Chamado na virada de ponto turístico/rodada
     public void OnBusArrivedAtStation()
     {
         if (matchSetupManager != null)
