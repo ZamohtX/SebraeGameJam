@@ -5,6 +5,7 @@ using TMPro;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    [SerializeField] private UnityEngine.UI.GraphicRaycaster canvasRaycaster;
 
     [Header("Configurações do Tabuleiro")]
     [SerializeField] private int gridWidth = 4;
@@ -116,8 +117,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-    public void CheckAccusation(Passenger accusedPassenger)
+public void CheckAccusation(Passenger accusedPassenger)
     {
         if (accusedPassenger.Status == PassengerStatus.Thief)
         {
@@ -126,17 +126,18 @@ public class GameManager : MonoBehaviour
         else
         {
             accusedPassenger.Status = PassengerStatus.Expelled;
-
-            UpdateExpelledPassengersVisual();
             
             currentRound++;
 
             if (currentRound > MAX_ROUNDS)
             {
+                // Inocente some imediatamente se o jogo acabou
+                UpdateExpelledPassengersVisual();
                 ProcessLoss(true);  
             }
             else
             {
+                // Dispara a transição passando o passageiro acusado
                 StartCoroutine(TransitionToNextRound(accusedPassenger));
             }
         }
@@ -155,61 +156,94 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-
-    // Fluxo cinematográfico completo integrado com as paradas de Maceió e falas locais
-    private System.Collections.IEnumerator TransitionToNextRound(Passenger expelled)
+private System.Collections.IEnumerator TransitionToNextRound(Passenger expelled)
     {
-        // 1. Simula a chegada no ponto de ônibus (Para o som do motor e toca o freio)
+        // Pega o Raycaster do Canvas automaticamente se não tiver sido arrastado no Inspector
+        UnityEngine.UI.GraphicRaycaster raycaster = GetComponentInParent<UnityEngine.UI.GraphicRaycaster>();
+        if (raycaster == null) raycaster = FindFirstObjectByType<UnityEngine.UI.GraphicRaycaster>();
+
+        // 🚨 BLOQUEIO TOTAL: Desativa qualquer clique ou interação na tela inteira
+        if (raycaster != null) raycaster.enabled = false;
+
+        // 1. FADE IN (A tela começa a escurecer enquanto o ônibus para no ponto)
         if (AudioManager.Instance != null) AudioManager.Instance.StopBus();
+        
+        if (FadeManager.Instance != null)
+        {
+            yield return StartCoroutine(FadeManager.Instance.FadeIn(0.8f));
+        }
+        else
+        {
+            yield return new WaitForSeconds(1.0f);
+        }
 
-        Debug.Log("[FADE] Entrando em tela preta... Onibus parando no ponto.");
-        yield return new WaitForSeconds(1.0f); // Tempo do Fade In fictício
+        // 2. SUMIR COM O INOCENTE
+        UpdateExpelledPassengersVisual();
 
-        // 2. Carrega a foto da praia/ponto turístico de Maceió no fundo do painel de mensagens
+        // 3. ATIVA A IMAGEM DO PONTO DE ÔNIBUS NO FUNDO
         if (RouteManager.Instance != null)
         {
             RouteManager.Instance.ShowCurrentStation();
         }
 
-        // 3. Exibe qual passageiro inocente foi expulso e a fala dele por cima do cenário
+        // Prepara a fala de indignação do passageiro que saiu do ônibus
         string mensagemDoInocente = ObterNomePorSpriteId(expelled.SpriteId);
         displayMessage(mensagemDoInocente);
 
-        // Dá 3.5 segundos para o jogador ler a frustração do inocente na parada
+        // 4. FADE OUT (Revela o cenário do ponto com a mensagem da pessoa expulsa)
+        if (FadeManager.Instance != null)
+        {
+            yield return StartCoroutine(FadeManager.Instance.FadeOut(0.5f));
+        }
+
+        // Tempo de leitura da reclamação do passageiro (Cliques continuam bloqueados aqui!)
         yield return new WaitForSeconds(3.5f);
 
-        // 4. Avisa que o ladrão agiu novamente no ônibus
+        // 5. ATUALIZA A CAIXA PARA A SEGUNDA MENSAGEM
         if (AudioManager.Instance != null) AudioManager.Instance.PlayTheft();
-        displayMessage("<color=red><b>ATENÇÃO MOTORISTA!</b></color>\n\nEnquanto você estava na parada, houve outro roubo a bordo!");
+        displayMessage("<color=red><b>ATENÇÃO MOTORISTA!</b></color>\n\nEnquanto o ônibus estava parado neste ponto, houve outro roubo a bordo!");
 
-        // Executa o cálculo matemático do próximo roubo em background
+        // Executa o cálculo matemático do roubo da IA secretamente em background
         if (matchSetupManager != null)
         {
             matchSetupManager.ExecuteThiefTurn(BusGrid);
         }
 
         // Tempo para leitura do alerta de roubo
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(3.5f);
 
-        // 5. Entra em tela preta para fechar a parada e voltar pro percurso
-        Debug.Log("[FADE] Entrando em tela preta para voltar para dentro do ônibus.");
-        yield return new WaitForSeconds(1.0f);
+        // 6. FADE IN FINAL (Escurece a tela para sair do ponto turístico)
+        if (FadeManager.Instance != null)
+        {
+            yield return StartCoroutine(FadeManager.Instance.FadeIn(0.8f));
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.8f);
+        }
 
-        // Desliga a tela da parada e pula o índice para a foto do próximo ponto turístico
+        // 7. DESATIVAR PAINÉIS E AVANÇAR A FOTO PARA A PRÓXIMA ESTAÇÃO
         if (RouteManager.Instance != null)
         {
             RouteManager.Instance.HideStation();
             RouteManager.Instance.AdvanceToNextStation();
         }
 
-        // Desliga o painel de texto base para revelar o ônibus limpo novamente
         if (messagePanel != null) messagePanel.SetActive(false);
 
-        // 6. Dá partida no ônibus de novo para a nova rodada
         if (AudioManager.Instance != null) AudioManager.Instance.StartBus();
-        Debug.Log("[FADE] Saindo da tela preta... Proximo round começou.");
-    }
 
+        // 8. FADE OUT FINAL (Volta para dentro do ônibus)
+        if (FadeManager.Instance != null)
+        {
+            yield return StartCoroutine(FadeManager.Instance.FadeOut(0.6f));
+        }
+
+        // 🔓 LIBERAÇÃO: Toda a animação acabou e o ônibus voltou a andar, agora o jogador pode clicar de novo
+        if (raycaster != null) raycaster.enabled = true;
+
+        Debug.Log("[FLUXO SEGURO] Parada finalizada. Cliques reativados para o gameplay.");
+    }
     private void ProcessWin()
     {
         if (AudioManager.Instance != null) AudioManager.Instance.PlayFanfare();
