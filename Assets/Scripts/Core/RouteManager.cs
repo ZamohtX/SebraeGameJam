@@ -18,11 +18,9 @@ public class RouteManager : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else Destroy(gameObject);
-<<<<<<< HEAD
 
+        // Mantido: Garante que o painel comece escondido ao iniciar o jogo
         if (stationPanel != null) stationPanel.SetActive(false);
-=======
->>>>>>> 79db131acaf8a656b2997f5e3a9684222c022b24
     }
 
     public void ShowCurrentStation()
@@ -32,10 +30,6 @@ public class RouteManager : MonoBehaviour
 
         int index = currentStationIndex % stationBackgrounds.Length;
         stationBackgroundImageComponent.sprite = stationBackgrounds[index];
-<<<<<<< HEAD
-
-=======
->>>>>>> 79db131acaf8a656b2997f5e3a9684222c022b24
         stationPanel.SetActive(true);
     }
 
@@ -43,11 +37,7 @@ public class RouteManager : MonoBehaviour
     {
         currentStationIndex++;
     }
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> 79db131acaf8a656b2997f5e3a9684222c022b24
     public void HideStation()
     {
         if (stationPanel != null) stationPanel.SetActive(false);
