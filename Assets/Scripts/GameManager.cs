@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
@@ -18,6 +19,9 @@ public class GameManager : MonoBehaviour
     [SerializeField] private RulesPanelUI rulesPanelUI;
     [SerializeField] private MatchSetupManager matchSetupManager; 
     [SerializeField] private GameResultUI gameResultUI;
+
+    [SerializeField] private GameObject messagePanel; 
+    [SerializeField] private TextMeshProUGUI messageText;
 
     public BusGrid BusGrid { get; private set; }
     public bool isPaused { get; private set; } = false;
@@ -150,6 +154,7 @@ public class GameManager : MonoBehaviour
 
     private System.Collections.IEnumerator TransitionToNextRound()
     {
+        displayMessage("O passageiro acusado é expulso do ônibus!");
         Debug.Log("[FADE] Entrando em tela preta... Onibus parando no ponto.");
         yield return new WaitForSeconds(1.0f);
 
@@ -178,7 +183,7 @@ public class GameManager : MonoBehaviour
         {
             SaveManager.SaveGameProgress(1, currentRound);
             Debug.Log($"[HIGHSCORE] Novo recorde estabelecido: {currentRound} rodadas!");
-        }  
+        }
 
         if (gameResultUI != null)
         {
@@ -197,19 +202,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    private void displayMessage(string message)
+    {
+        if (messagePanel != null && messageText != null)
+        {
+            messageText.text = message;
+            messagePanel.SetActive(true);
+        }
+    }
+
     public void RestartScene()
     {
         Time.timeScale = 1f;
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
-    }
-
-    public void OnBusArrivedAtStation()
-    {
-        if (matchSetupManager != null)
-        {
-            matchSetupManager.ExecuteThiefTurn(BusGrid);
-        }
-    }
+    } 
 
     public void PauseGame()
     {
