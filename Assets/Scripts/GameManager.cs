@@ -20,9 +20,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private MatchSetupManager matchSetupManager; 
     [SerializeField] private GameResultUI gameResultUI;
 
+    [Header("Configurações de Mensagens e Paradas")]
     [SerializeField] private GameObject messagePanel; 
     [SerializeField] private TextMeshProUGUI messageText;
 
+    [Header("Pool de Nomes Alagoanos (Mecânica de Identidade)")]
     [SerializeField] private List<string> idosa = new List<string> { "Dona Guilhermina", "Dona Maria josé", " Dona Socorro", "Dona Cida", "Dona Franscisca" };
     [SerializeField] private List<string> clt = new List<string> { "Alexandre", "Ricardo", "Cristóvão", "Celso", "Wellington" };
     [SerializeField] private List<string> menina = new List<string> { "Nicole", "Laura", "Ana", "Júlia", "Lilian" };
@@ -102,7 +104,6 @@ public class GameManager : MonoBehaviour
             if (i == thiefIndex)
             {
                 passenger.Status = PassengerStatus.Thief;
-                // CORRIGIDO: Tag 'cyan' digitada corretamente
                 Debug.Log($"<color=cyan>[DEV]</color> Ladrão gerado no ID: {uniqueId} na posição ({seat.GridX}, {seat.GridY})");
             }
 
@@ -145,7 +146,6 @@ public class GameManager : MonoBehaviour
     {
         foreach (var seat in registeredSeats)
         {
-            // CORRIGIDO: Adicionada checagem defensiva extra para evitar quebras
             if (seat.PassengerView != null && seat.PassengerView.gameObject.activeSelf && seat.PassengerView.Passenger != null)
             {
                 if (seat.PassengerView.Passenger.Status == PassengerStatus.Expelled)
@@ -156,34 +156,64 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Fluxo cinematográfico completo integrado com as paradas de Maceió e falas locais
     private System.Collections.IEnumerator TransitionToNextRound(Passenger expelled)
     {
-        int spriteIdDoExpulso = expelled.SpriteId;
-        string mensagem = ObterNomePorSpriteId(spriteIdDoExpulso);
+        // 1. Simula a chegada no ponto de ônibus (Para o som do motor e toca o freio)
+        if (AudioManager.Instance != null) AudioManager.Instance.StopBus();
 
-        displayMessage(mensagem);
         Debug.Log("[FADE] Entrando em tela preta... Onibus parando no ponto.");
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(1.0f); // Tempo do Fade In fictício
 
-        if (gameResultUI != null)
+        // 2. Carrega a foto da praia/ponto turístico de Maceió no fundo do painel de mensagens
+        if (RouteManager.Instance != null)
         {
-            gameResultUI.ShowRoundReport(currentRound);
+            RouteManager.Instance.ShowCurrentStation();
         }
 
-        // Executa o roubo da próxima rodada de forma segura
+        // 3. Exibe qual passageiro inocente foi expulso e a fala dele por cima do cenário
+        string mensagemDoInocente = ObterNomePorSpriteId(expelled.SpriteId);
+        displayMessage(mensagemDoInocente);
+
+        // Dá 3.5 segundos para o jogador ler a frustração do inocente na parada
+        yield return new WaitForSeconds(3.5f);
+
+        // 4. Avisa que o ladrão agiu novamente no ônibus
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayTheft();
+        displayMessage("<color=red><b>ATENÇÃO MOTORISTA!</b></color>\n\nEnquanto você estava na parada, houve outro roubo a bordo!");
+
+        // Executa o cálculo matemático do próximo roubo em background
         if (matchSetupManager != null)
         {
             matchSetupManager.ExecuteThiefTurn(BusGrid);
         }
 
-        yield return new WaitForSeconds(2.5f);
+        // Tempo para leitura do alerta de roubo
+        yield return new WaitForSeconds(3.0f);
 
+        // 5. Entra em tela preta para fechar a parada e voltar pro percurso
+        Debug.Log("[FADE] Entrando em tela preta para voltar para dentro do ônibus.");
+        yield return new WaitForSeconds(1.0f);
+
+        // Desliga a tela da parada e pula o índice para a foto do próximo ponto turístico
+        if (RouteManager.Instance != null)
+        {
+            RouteManager.Instance.HideStation();
+            RouteManager.Instance.AdvanceToNextStation();
+        }
+
+        // Desliga o painel de texto base para revelar o ônibus limpo novamente
+        if (messagePanel != null) messagePanel.SetActive(false);
+
+        // 6. Dá partida no ônibus de novo para a nova rodada
+        if (AudioManager.Instance != null) AudioManager.Instance.StartBus();
         Debug.Log("[FADE] Saindo da tela preta... Proximo round começou.");
-        // TODO: Desativar painel de round report ou disparar animação de fade out aqui
     }
 
     private void ProcessWin()
     {
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayFanfare();
+
         int savedHighScore = SaveManager.LoadHighScore();
 
         if (savedHighScore == 0 || currentRound < savedHighScore)
@@ -191,6 +221,24 @@ public class GameManager : MonoBehaviour
             SaveManager.SaveGameProgress(1, currentRound);
             Debug.Log($"[HIGHSCORE] Novo recorde estabelecido: {currentRound} rodadas!");
         }
+
+        StartCoroutine(VictoryTransitionCoroutine());
+    }
+
+    private System.Collections.IEnumerator VictoryTransitionCoroutine()
+    {
+        if (AudioManager.Instance != null) AudioManager.Instance.StopBus();
+        yield return new WaitForSeconds(1.0f);
+
+        if (RouteManager.Instance != null)
+        {
+            RouteManager.Instance.ShowCurrentStation();
+        }
+
+        int bestScore = SaveManager.LoadHighScore();
+        displayMessage($"<color=green><b>LADRÃO CAPTURADO!</b></color>\n\nVocê descobriu o meliante em <b>{currentRound} rodadas</b>!\n\n🏆 Seu Melhor Recorde: {bestScore} rodadas.");
+
+        yield return new WaitForSeconds(3.5f);
 
         if (gameResultUI != null)
         {
@@ -200,6 +248,8 @@ public class GameManager : MonoBehaviour
 
     private void ProcessLoss(bool ranOutRounds)
     {
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayFrustration();
+
         Passenger trueThief = BusGrid.GetAllPassengers().Find(p => p.Status == PassengerStatus.Thief);
         string thiefId = trueThief != null ? trueThief.Id : "Desconhecido";
 
@@ -216,19 +266,19 @@ public class GameManager : MonoBehaviour
         {
             case 0:
                 nome = idosa[Random.Range(0, idosa.Count)];
-                return $"{nome} diz: Tá repreendido em nome do Senhor";
+                return $"<b>{nome}</b> diz:\n<i>\"Tá repreendido em nome do Senhor!\"</i>";
             case 1:
                 nome = clt[Random.Range(0, clt.Count)];
-                return $"{nome} diz: Não acredito nisso, vou ter que pegar outro ônibus!!!";
+                return $"<b>{nome}</b> diz:\n<i>\"Não acredito nisso, vou perder a hora e ter que pegar outro ônibus!!!\"</i>";
             case 2:
                 nome  = menina[Random.Range(0, menina.Count)];
-                return $"{nome} diz: Eita bixiga!!";
+                return $"<b>{nome}</b> diz:\n<i>\"Eita bixiga!!\"</i>";
             case 3:
                 nome = menino[Random.Range(0, menino.Count)];
-                return $"{nome} diz: Vou contar pra minha mãee";
+                return $"<b>{nome}</b> diz:\n<i>\"Vou contar tudo pra minha mãee!\"</i>";
             default:
                 Debug.LogError("Lista de nomes não encontrada");
-                return null;
+                return "Um passageiro inocente foi expulso do ônibus.";
         }
     }
 
@@ -238,6 +288,11 @@ public class GameManager : MonoBehaviour
         
         messageText.text = message;
         messagePanel.SetActive(true);
+    }
+
+    public BusSeatView GetSeatAtPosition(int x, int y)
+    {
+        return registeredSeats.Find(seat => seat.GridX == x && seat.GridY == y);
     }
 
     public void RestartScene()
@@ -257,4 +312,4 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1f;
     }
-}
+}   
