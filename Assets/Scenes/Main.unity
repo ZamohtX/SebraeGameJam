@@ -461,7 +461,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -0.000021458, y: 10.332307}
-  m_SizeDelta: {x: 1315.7744, y: 150.6941}
+  m_SizeDelta: {x: 1315.7744, y: 164.01}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &207568378
 MonoBehaviour:
@@ -1307,12 +1307,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RouteManager
   stationBackgrounds:
+  - {fileID: -2742308789676363820, guid: 68717b7185013a04a901490d4f715af1, type: 3}
+  - {fileID: -5691235553109023861, guid: 3532baf58bf4c2e44bf01878d4b87c7c, type: 3}
   - {fileID: -1393183086894522796, guid: 94984e77267831349933c8d072225238, type: 3}
-  - {fileID: -1393183086894522796, guid: 94984e77267831349933c8d072225238, type: 3}
-  - {fileID: -1393183086894522796, guid: 94984e77267831349933c8d072225238, type: 3}
-  - {fileID: -1393183086894522796, guid: 94984e77267831349933c8d072225238, type: 3}
-  - {fileID: -1393183086894522796, guid: 94984e77267831349933c8d072225238, type: 3}
-  - {fileID: -1393183086894522796, guid: 94984e77267831349933c8d072225238, type: 3}
+  - {fileID: -1432947098381759055, guid: a0ae4327d7b382d44a2f44e3b7901059, type: 3}
+  - {fileID: -3667816732644092949, guid: ed99064b6fad02d40bccb42809a37b60, type: 3}
   stationBackgroundImageComponent: {fileID: 1516586272}
   stationPanel: {fileID: 1765367028}
 --- !u!4 &406088311
@@ -4617,8 +4616,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 657.8872, y: -75.34705}
-  m_SizeDelta: {x: 1187.7744, y: 22.694105}
+  m_AnchoredPosition: {x: 657.8872, y: -82.005}
+  m_SizeDelta: {x: 1187.7744, y: 36.01}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1623622803
 MonoBehaviour:
@@ -4667,7 +4666,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 52.55
+  m_fontSize: 36
   m_fontSizeBase: 52.55
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4955,6 +4954,81 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1691650180}
   m_CullTransparentMesh: 1
+--- !u!1 &1697843549
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1697843550}
+  - component: {fileID: 1697843552}
+  - component: {fileID: 1697843551}
+  m_Layer: 5
+  m_Name: Station Bus
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1697843550
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697843549}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1765367029}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1697843551
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697843549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 82f8ad440fb2d6e44baa61586ce617c4, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1697843552
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1697843549}
+  m_CullTransparentMesh: 1
 --- !u!4 &1701696408 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1905981919917318625, guid: 07771707fddbf274b9d22f0b1476a690, type: 3}
@@ -5106,6 +5180,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1516586270}
+  - {fileID: 1697843550}
   - {fileID: 207568376}
   m_Father: {fileID: 1230556613}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
