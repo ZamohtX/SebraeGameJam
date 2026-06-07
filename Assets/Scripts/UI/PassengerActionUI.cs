@@ -18,7 +18,7 @@ public class PassengerActionUI : MonoBehaviour
 
     public void Open(PassengerView passengerView)
     {
-        AudioManager.Instance.PlayClick();
+        if (AudioManager.Instance != null)  AudioManager.Instance.PlayClick();
 
         if (selectedPassenger != null)
         {
@@ -40,7 +40,7 @@ public class PassengerActionUI : MonoBehaviour
 
     public void Close()
     {
-        AudioManager.Instance.PlayClick();
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
 
         // Remove o highlight do passageiro antes de limpar a sele��o
         if (selectedPassenger != null)
@@ -54,7 +54,7 @@ public class PassengerActionUI : MonoBehaviour
 
     public void Accuse()
     {
-        AudioManager.Instance.PlayClick();
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
 
         if (selectedPassenger != null)
         {

@@ -60,7 +60,7 @@ public class GameManager : MonoBehaviour
             matchSetupManager.InitializeMatch(BusGrid.GetAllPassengers(), rulesPanelUI);
         }
 
-        AudioManager.Instance.StartBus();
+        if (AudioManager.Instance != null)  AudioManager.Instance.StartBus();
     }
 
     private void PopulateBus()
