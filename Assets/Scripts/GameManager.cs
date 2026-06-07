@@ -23,6 +23,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject messagePanel; 
     [SerializeField] private TextMeshProUGUI messageText;
 
+    [SerializeField] private List<string> idosa = new List<string> { "Dona Guilhermina", "Dona Maria josé", " Dona Socorro", "Dona Cida", "Dona Franscisca" };
+    [SerializeField] private List<string> clt = new List<string> { "Alexandre", "Ricardo", "Cristóvão", "Celso", "Wellington" };
+    [SerializeField] private List<string> menina = new List<string> { "Nicole", "Laura", "Ana", "Júlia", "Lilian" };
+    [SerializeField] private List<string> menino = new List<string> { "Pedro", "Davi", "Cauã", "Lucas", "Marquinhos" };
+
     public BusGrid BusGrid { get; private set; }
     public bool isPaused { get; private set; } = false;
 
@@ -131,7 +136,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                StartCoroutine(TransitionToNextRound());
+                StartCoroutine(TransitionToNextRound(accusedPassenger));
             }
         }
     }
@@ -151,9 +156,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private System.Collections.IEnumerator TransitionToNextRound()
+    private System.Collections.IEnumerator TransitionToNextRound(Passenger expelled)
     {
-        displayMessage("O passageiro acusado é expulso do ônibus!");
+        int spriteIdDoExpulso = expelled.SpriteId;
+        string mensagem = ObterNomePorSpriteId(spriteIdDoExpulso);
+
+        displayMessage(mensagem);
         Debug.Log("[FADE] Entrando em tela preta... Onibus parando no ponto.");
         yield return new WaitForSeconds(1.0f);
 
@@ -199,7 +207,30 @@ public class GameManager : MonoBehaviour
         {
             gameResultUI.ShowFinalResult(false, currentRound, thiefId);
         }
-    }    
+    }
+    
+    private string ObterNomePorSpriteId(int spriteId)
+    {
+        string nome = "";
+        switch (spriteId)
+        {
+            case 0:
+                nome = idosa[Random.Range(0, idosa.Count)];
+                return $"{nome} diz: Tá repreendido em nome do Senhor";
+            case 1:
+                nome = clt[Random.Range(0, clt.Count)];
+                return $"{nome} diz: Não acredito nisso, vou ter que pegar outro ônibus!!!";
+            case 2:
+                nome  = menina[Random.Range(0, menina.Count)];
+                return $"{nome} diz: Eita bixiga!!";
+            case 3:
+                nome = menino[Random.Range(0, menino.Count)];
+                return $"{nome} diz: Vou contar pra minha mãee";
+            default:
+                Debug.LogError("Lista de nomes não encontrada");
+                return null;
+        }
+    }
 
     private void displayMessage(string message)
     {
