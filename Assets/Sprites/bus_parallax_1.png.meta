@@ -1,0 +1,715 @@
+fileFormatVersion: 2
+guid: 98d0f7c3d7046ec4d83c13ac673dce7f
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4882416985266461449
+    second: bus_parallax_1_0
+  - first:
+      213: -533958391668070310
+    second: bus_parallax_1_1
+  - first:
+      213: -4316955426664752115
+    second: bus_parallax_1_2
+  - first:
+      213: 2496942573534837741
+    second: bus_parallax_1_3
+  - first:
+      213: -6549786924937278515
+    second: bus_parallax_1_4
+  - first:
+      213: 2451088415870593736
+    second: bus_parallax_1_5
+  - first:
+      213: -7827736812244762958
+    second: bus_parallax_1_6
+  - first:
+      213: 4500907362922212587
+    second: bus_parallax_1_7
+  - first:
+      213: 5754709931013772587
+    second: bus_parallax_1_8
+  - first:
+      213: -5810260464062480405
+    second: bus_parallax_1_9
+  - first:
+      213: 3603304125586744935
+    second: bus_parallax_1_10
+  - first:
+      213: -2594841797043641015
+    second: bus_parallax_1_11
+  - first:
+      213: 5261402555130724711
+    second: bus_parallax_1_12
+  - first:
+      213: 7276786294973411727
+    second: bus_parallax_1_13
+  - first:
+      213: -5800278222164542248
+    second: bus_parallax_1_14
+  - first:
+      213: -7967560899002402727
+    second: bus_parallax_1_15
+  - first:
+      213: -8900943768058378784
+    second: bus_parallax_1_16
+  - first:
+      213: -8280897627527013367
+    second: bus_parallax_1_17
+  - first:
+      213: 3377121256462539688
+    second: bus_parallax_1_18
+  - first:
+      213: 8441132636406242958
+    second: bus_parallax_1_19
+  - first:
+      213: 2065421368611723124
+    second: bus_parallax_1_20
+  - first:
+      213: 1599755075102359258
+    second: bus_parallax_1_21
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 1
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 50
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WindowsStoreApps
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: bus_parallax_1_0
+      rect:
+        serializedVersion: 2
+        x: 4985
+        y: 906
+        width: 11
+        height: 12
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90b14244164d1c340800000000000000
+      internalID: 4882416985266461449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_1
+      rect:
+        serializedVersion: 2
+        x: 5391
+        y: 391
+        width: 394
+        height: 624
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a5829cbfbaff698f0800000000000000
+      internalID: -533958391668070310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_2
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 615
+        width: 275
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d0cd37269e71714c0800000000000000
+      internalID: -4316955426664752115
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_3
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 617
+        width: 255
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: debf7109a0ce6a220800000000000000
+      internalID: 2496942573534837741
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_4
+      rect:
+        serializedVersion: 2
+        x: 621
+        y: 636
+        width: 134
+        height: 250
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: dcb8d987e7b7a15a0800000000000000
+      internalID: -6549786924937278515
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_5
+      rect:
+        serializedVersion: 2
+        x: 743
+        y: 589
+        width: 401
+        height: 280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8caaa058de3040220800000000000000
+      internalID: 2451088415870593736
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_6
+      rect:
+        serializedVersion: 2
+        x: 1212
+        y: 611
+        width: 328
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2bef6e6a7da4e5390800000000000000
+      internalID: -7827736812244762958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_7
+      rect:
+        serializedVersion: 2
+        x: 1572
+        y: 607
+        width: 343
+        height: 173
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bec2be5566f667e30800000000000000
+      internalID: 4500907362922212587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_8
+      rect:
+        serializedVersion: 2
+        x: 2116
+        y: 612
+        width: 3031
+        height: 264
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b251d774136dcdf40800000000000000
+      internalID: 5754709931013772587
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_9
+      rect:
+        serializedVersion: 2
+        x: 5796
+        y: 625
+        width: 140
+        height: 113
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: bef3f0b54eecd5fa0800000000000000
+      internalID: -5810260464062480405
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_10
+      rect:
+        serializedVersion: 2
+        x: 5949
+        y: 632
+        width: 479
+        height: 215
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7662c47d202810230800000000000000
+      internalID: 3603304125586744935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_11
+      rect:
+        serializedVersion: 2
+        x: 6499
+        y: 628
+        width: 153
+        height: 59
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 945a0e632254dfbd0800000000000000
+      internalID: -2594841797043641015
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_12
+      rect:
+        serializedVersion: 2
+        x: 6518
+        y: 629
+        width: 313
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 76146ee6fb1440940800000000000000
+      internalID: 5261402555130724711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_13
+      rect:
+        serializedVersion: 2
+        x: 6870
+        y: 634
+        width: 289
+        height: 134
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f81325ac4965cf460800000000000000
+      internalID: 7276786294973411727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_14
+      rect:
+        serializedVersion: 2
+        x: 7166
+        y: 643
+        width: 49
+        height: 210
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8dcb27920b5418fa0800000000000000
+      internalID: -5800278222164542248
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_15
+      rect:
+        serializedVersion: 2
+        x: 7264
+        y: 627
+        width: 383
+        height: 167
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9587ba883998d6190800000000000000
+      internalID: -7967560899002402727
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_16
+      rect:
+        serializedVersion: 2
+        x: 7687
+        y: 615
+        width: 275
+        height: 198
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 0e5472b5dce797480800000000000000
+      internalID: -8900943768058378784
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_17
+      rect:
+        serializedVersion: 2
+        x: 8065
+        y: 617
+        width: 255
+        height: 147
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90c90e95b77541d80800000000000000
+      internalID: -8280897627527013367
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_18
+      rect:
+        serializedVersion: 2
+        x: 8301
+        y: 636
+        width: 134
+        height: 250
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 8abded6d3e1fdde20800000000000000
+      internalID: 3377121256462539688
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_19
+      rect:
+        serializedVersion: 2
+        x: 8423
+        y: 589
+        width: 401
+        height: 280
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e8e53f6e86de42570800000000000000
+      internalID: 8441132636406242958
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_20
+      rect:
+        serializedVersion: 2
+        x: 8892
+        y: 611
+        width: 328
+        height: 165
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4775a9baac9d9ac10800000000000000
+      internalID: 2065421368611723124
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: bus_parallax_1_21
+      rect:
+        serializedVersion: 2
+        x: 9252
+        y: 607
+        width: 343
+        height: 173
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: adeba13d3c8733610800000000000000
+      internalID: 1599755075102359258
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      bus_parallax_1_0: 4882416985266461449
+      bus_parallax_1_1: -533958391668070310
+      bus_parallax_1_10: 3603304125586744935
+      bus_parallax_1_11: -2594841797043641015
+      bus_parallax_1_12: 5261402555130724711
+      bus_parallax_1_13: 7276786294973411727
+      bus_parallax_1_14: -5800278222164542248
+      bus_parallax_1_15: -7967560899002402727
+      bus_parallax_1_16: -8900943768058378784
+      bus_parallax_1_17: -8280897627527013367
+      bus_parallax_1_18: 3377121256462539688
+      bus_parallax_1_19: 8441132636406242958
+      bus_parallax_1_2: -4316955426664752115
+      bus_parallax_1_20: 2065421368611723124
+      bus_parallax_1_21: 1599755075102359258
+      bus_parallax_1_3: 2496942573534837741
+      bus_parallax_1_4: -6549786924937278515
+      bus_parallax_1_5: 2451088415870593736
+      bus_parallax_1_6: -7827736812244762958
+      bus_parallax_1_7: 4500907362922212587
+      bus_parallax_1_8: 5754709931013772587
+      bus_parallax_1_9: -5810260464062480405
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
