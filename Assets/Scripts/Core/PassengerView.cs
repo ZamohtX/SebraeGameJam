@@ -5,6 +5,7 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private BoxCollider2D boxCollider;
+     [SerializeField] private GameObject robbedNotice;
 
     public Passenger Passenger { get; private set; }
     private SpriteManager spriteManager;
@@ -29,9 +30,17 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
     // CORRIGIDO: Implementação do UpdateVisual que estava faltando
     public void UpdateVisual()
     {
-        if (Passenger == null || spriteManager == null || spriteRenderer == null) return;
+        if (Passenger == null || spriteManager == null || spriteRenderer == null || robbedNotice == null) return;
 
-        spriteRenderer.sprite = spriteManager.GetSprite(Passenger.SpriteId);
+        if (Passenger.Status == PassengerStatus.Intact) {
+            spriteRenderer.sprite = spriteManager.GetSprite(Passenger.SpriteId);
+            robbedNotice.SetActive(false);
+        }
+        else if (Passenger.Status == PassengerStatus.Robbed)
+        {
+            spriteRenderer.sprite = spriteManager.GetRobbedSprite(Passenger.SpriteId);
+            robbedNotice.SetActive(true);
+        }
         //spriteRenderer.color = spriteManager.GetColor(Passenger.ClothingColorId);
     }
 
@@ -67,5 +76,12 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
             // Volta para a cor padrão do sprite (branco normal)
             spriteRenderer.color = Color.white;
         }
+    }
+
+    public void RobPassenger()
+    {
+        if (Passenger == null) return;
+
+        UpdateVisual();
     }
 }

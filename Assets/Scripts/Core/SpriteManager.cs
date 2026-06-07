@@ -6,16 +6,11 @@ public class SpriteManager : MonoBehaviour
     private Sprite[] passengerSprites;
 
     [SerializeField]
-    private Color[] clothingColors;
+    private Sprite[] robbedSprites;
 
     public int GetRandomSpriteId()
     {
         return Random.Range(0, passengerSprites.Length);
-    }
-
-    public int GetRandomColorId()
-    {
-        return Random.Range(0, clothingColors.Length);
     }
 
     public Sprite GetSprite(int spriteId)
@@ -23,8 +18,9 @@ public class SpriteManager : MonoBehaviour
         return passengerSprites[spriteId];
     }
 
-    public Color GetColor(int colorId)
+    public Sprite GetRobbedSprite(int spriteId)
     {
-        return clothingColors[colorId];
+        if (spriteId < 0 || spriteId >= robbedSprites.Length) return null;
+        return robbedSprites[spriteId];
     }
 }

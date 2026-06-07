@@ -1,9 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.SceneManagement; 
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+    [SerializeField] private UnityEngine.UI.GraphicRaycaster canvasRaycaster;
 
     [Header("Configurações do Tabuleiro")]
     [SerializeField] private int gridWidth = 4;
@@ -13,15 +16,21 @@ public class GameManager : MonoBehaviour
     private int currentRound = 1;
     private const int MAX_ROUNDS = 5;
 
-    [Header("Referências de UI Internas")]
-    [SerializeField] private GameObject messagePanel; 
-    [SerializeField] private TMPro.TMP_Text messageText;
-
     [Header("Referências Técnicas")]
     [SerializeField] private SpriteManager spriteManager;
     [SerializeField] private RulesPanelUI rulesPanelUI;
     [SerializeField] private MatchSetupManager matchSetupManager; 
     [SerializeField] private GameResultUI gameResultUI;
+
+    [Header("Configurações de Mensagens e Paradas")]
+    [SerializeField] private GameObject messagePanel; 
+    [SerializeField] private TextMeshProUGUI messageText;
+
+    [Header("Pool de Nomes Alagoanos")]
+    [SerializeField] private List<string> idosa = new List<string> { "Dona Guilhermina", "Dona Maria josé", " Dona Socorro", "Dona Cida", "Dona Franscisca" };
+    [SerializeField] private List<string> clt = new List<string> { "Alexandre", "Ricardo", "Cristóvão", "Celso", "Wellington" };
+    [SerializeField] private List<string> menina = new List<string> { "Nicole", "Laura", "Ana", "Júlia", "Lilian" };
+    [SerializeField] private List<string> menino = new List<string> { "Pedro", "Davi", "Cauã", "Lucas", "Marquinhos" };
 
     public BusGrid BusGrid { get; private set; }
     public bool isPaused { get; private set; } = false;
@@ -33,11 +42,13 @@ public class GameManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
+            // Se um novo GameManager surgir ao recarregar a cena, limpa a lista da instância ativa
+            Instance.registeredSeats.Clear();
             Destroy(gameObject);
+            return;
         }
     }
 
@@ -52,33 +63,36 @@ public class GameManager : MonoBehaviour
 
     private void Start()
     {
+        // Se voltarmos do menu ou reiniciarmos, resetamos as variáveis básicas
         currentRound = 1;
-        BusGrid = new BusGrid(gridWidth, gridHeight);
+        isPaused = false;
+        Time.timeScale = 1f;
 
-        // Instancia e posiciona os passageiros logicamente e visualmente
+        // Coleta os assentos da cena de forma segura (Prevenção de ônibus vazio)
+        BusSeatView[] seatsInScene = FindObjectsByType<BusSeatView>(FindObjectsSortMode.None);
+        registeredSeats = new List<BusSeatView>(seatsInScene);
+
+        // Inicializa o Grid lógico do ônibus
+        BusGrid = new BusGrid(gridWidth, gridHeight);
         PopulateBus();
 
-        // Tenta buscar o gerenciador de partidas se não foi arrastado no Inspector
         if (matchSetupManager == null)
         {
             matchSetupManager = FindFirstObjectByType<MatchSetupManager>();
         }
 
-        // Inicializa as regras e a IA do Ladrão para o Round 1
         if (matchSetupManager != null)
         {
             matchSetupManager.InitializeMatch(BusGrid.GetAllPassengers(), rulesPanelUI);
             matchSetupManager.ExecuteThiefTurn(BusGrid);
         }
+
+        if (AudioManager.Instance != null) AudioManager.Instance.StartBus();
     }
 
     private void PopulateBus()
     {
-        if (registeredSeats.Count == 0)
-        {
-            Debug.LogWarning("Nenhuma cadeira foi registrada! Verifique se as cadeiras possuem o componente BusSeatView.");
-            return;
-        }
+        if (registeredSeats.Count == 0) return;
 
         int totalSeats = registeredSeats.Count;
         int thiefIndex = Random.Range(0, totalSeats);
@@ -87,18 +101,12 @@ public class GameManager : MonoBehaviour
         {
             BusSeatView seat = registeredSeats[i];
             string uniqueId = System.Guid.NewGuid().ToString().Substring(0, 5);
-            Passenger passenger = new Passenger(
-                uniqueId,
-                seat.GridX,
-                seat.GridY,
-                spriteManager.GetRandomSpriteId(),
-                spriteManager.GetRandomColorId()
-            );
+            Passenger passenger = new Passenger(uniqueId, seat.GridX, seat.GridY, spriteManager.GetRandomSpriteId());
 
             if (i == thiefIndex)
             {
                 passenger.Status = PassengerStatus.Thief;
-                Debug.Log($"<color=cyan>[DEV]</color> Ladrão gerado no ID: {uniqueId} na posição ({seat.GridX}, {seat.GridY})");
+                Debug.Log($"<color=cyan>[DEV]</color> Ladrão: {uniqueId} em ({seat.GridX}, {seat.GridY})");
             }
 
             BusGrid.AddPassenger(passenger, seat.GridX, seat.GridY);
@@ -109,15 +117,6 @@ public class GameManager : MonoBehaviour
                 seat.PassengerView.Initialize(passenger, spriteManager);
             }
         }
-    }
-
-    // Exibe textos informativos na sua caixa de mensagens nativa
-    private void displayMessage(string message)
-    {
-        if (messagePanel == null || messageText == null) return;
-        
-        messageText.text = message;
-        messagePanel.SetActive(true);
     }
 
     // Fluxo acionado pelo botão "Acusar" da interface do passageiro
@@ -131,19 +130,16 @@ public class GameManager : MonoBehaviour
         {
             // Errou: O inocente assume o status de expulso
             accusedPassenger.Status = PassengerStatus.Expelled;
-
-            // Remove o sprite do passageiro expulso do ônibus antes do fade voltar
-            UpdateExpelledPassengersVisual();
-            
             currentRound++;
 
             if (currentRound > MAX_ROUNDS)
             {
+                UpdateExpelledPassengersVisual();
                 ProcessLoss(true);  
             }
             else
             {
-                StartCoroutine(TransitionToNextRound());
+                StartCoroutine(TransitionToNextRound(accusedPassenger));
             }
         }
     }
@@ -152,7 +148,7 @@ public class GameManager : MonoBehaviour
     {
         foreach (var seat in registeredSeats)
         {
-            if (seat.PassengerView != null && seat.PassengerView.gameObject.activeSelf && seat.PassengerView.Passenger != null)
+            if (seat.PassengerView != null && seat.PassengerView.Passenger != null)
             {
                 if (seat.PassengerView.Passenger.Status == PassengerStatus.Expelled)
                 {
@@ -162,89 +158,93 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    // Coroutine para rounds normais (Erro de acusação)
-    private System.Collections.IEnumerator TransitionToNextRound()
+    // Coroutine para rounds normais (Transição suave e segura pelo Ponto de Ônibus)
+    private System.Collections.IEnumerator TransitionToNextRound(Passenger expelled)
     {
-        // 1. FADE IN (Transição simulada para a tela preta)
-        Debug.Log("[FADE] Entrando em tela preta... Ônibus parando no ponto.");
-        yield return new WaitForSeconds(1.0f);
+        if (canvasRaycaster != null) canvasRaycaster.enabled = false;
 
-        // 2. CONFIGURA O CENÁRIO (Injeta o PNG do ponto de ônibus atual no fundo)
-        if (RouteManager.Instance != null)
-        {
-            RouteManager.Instance.ShowCurrentStation();
-        }
+        if (AudioManager.Instance != null) AudioManager.Instance.StopBus();
+        if (FadeManager.Instance != null) yield return StartCoroutine(FadeManager.Instance.FadeIn(0.8f));
 
-        // 3. EXIBE A MENSAGEM NA CAIXA DE TEXTO NATIVA
-        displayMessage("Houve outro roubo no ônibus!");
+        UpdateExpelledPassengersVisual();
+        if (RouteManager.Instance != null) RouteManager.Instance.ShowCurrentStation();
 
-        // 4. TEMPO DE LEITURA (Jogador visualiza a parada de Maceió e lê o texto)
+        displayMessage(ObterNomePorSpriteId(expelled.SpriteId));
+        if (FadeManager.Instance != null) yield return StartCoroutine(FadeManager.Instance.FadeOut(0.5f));
+
         yield return new WaitForSeconds(3.5f);
 
-        // 5. PROCESSA O PRÓXIMO ROUBO (Acontece escondido antes do fade out)
-        if (matchSetupManager != null)
-        {
-            matchSetupManager.ExecuteThiefTurn(BusGrid);
-        }
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayTheft();
+        displayMessage("<color=red><b>ATENÇÃO MOTORISTA!</b></color>\n\nEnquanto o ônibus parou, houve outro roubo!");
 
-        // 6. SEGUNDO FADE IN (Preparando para voltar ao ônibus)
-        Debug.Log("[FADE] Entrando em tela preta para voltar para dentro do ônibus.");
-        yield return new WaitForSeconds(1.0f);
+        if (matchSetupManager != null) matchSetupManager.ExecuteThiefTurn(BusGrid);
+        yield return new WaitForSeconds(3.0f);
 
-        // 7. DESATIVA O CENÁRIO E AVANÇA A IMAGEM PARA A PRÓXIMA PARADA
+        if (FadeManager.Instance != null) yield return StartCoroutine(FadeManager.Instance.FadeIn(0.8f));
+
         if (RouteManager.Instance != null)
         {
-            RouteManager.Instance.HideStation(); 
-            RouteManager.Instance.AdvanceToNextStation(); 
+            RouteManager.Instance.HideStation();
+            RouteManager.Instance.AdvanceToNextStation();
         }
 
-        if (messagePanel != null)
-        {
-            messagePanel.SetActive(false);
-        }
+        if (messagePanel != null) messagePanel.SetActive(false);
+        if (AudioManager.Instance != null) AudioManager.Instance.StartBus();
+        if (FadeManager.Instance != null) yield return StartCoroutine(FadeManager.Instance.FadeOut(0.6f));
 
-        Debug.Log("[FADE] Saindo da tela preta... Próximo round começou.");
+        if (canvasRaycaster != null) canvasRaycaster.enabled = true;
     }
 
     private void ProcessWin()
     {
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayFanfare();
+
+        // Lógica de HighScore: Menos rodadas é melhor
         int savedHighScore = SaveManager.LoadHighScore();
 
-        // Se for menor número de rodadas, atualiza o recorde
+        // Salva se for o primeiro jogo (0) ou se a pontuação atual for menor que a salva
         if (savedHighScore == 0 || currentRound < savedHighScore)
         {
             SaveManager.SaveGameProgress(1, currentRound);
-            Debug.Log($"[HIGHSCORE] Novo recorde estabelecido: {currentRound} rodadas!");
-        }  
+            Debug.Log($"[HIGHSCORE] Novo recorde: {currentRound} rodadas!");
+        }
 
         StartCoroutine(VictoryTransitionCoroutine());
     }
 
-    // Coroutine para o fluxo de acerto (Vitória)
     private System.Collections.IEnumerator VictoryTransitionCoroutine()
     {
-        Debug.Log("[FADE] Entrando em tela preta... Transicionando para a vitória.");
-        yield return new WaitForSeconds(1.0f);
+        if (canvasRaycaster != null) canvasRaycaster.enabled = false;
+        if (AudioManager.Instance != null) AudioManager.Instance.StopBus();
+        
+        if (FadeManager.Instance != null) yield return StartCoroutine(FadeManager.Instance.FadeIn(0.8f));
 
-        if (RouteManager.Instance != null)
-        {
-            RouteManager.Instance.ShowCurrentStation();
-        }
+        if (RouteManager.Instance != null) RouteManager.Instance.ShowCurrentStation();
 
         int bestScore = SaveManager.LoadHighScore();
-        displayMessage($"<color=green><b>LADRÃO CAPTURADO!</b></color>\n\nVocê descobriu o meliante em {currentRound} rodadas nesta parada.\n🏆 Seu melhor recorde: {bestScore} rodadas.");
+        displayMessage($"<color=green><b>LADRÃO CAPTURADO!</b></color>\n\nVocê descobriu o meliante em <b>{currentRound} rodadas</b>!\n\n🏆 Melhor Recorde: {bestScore} rodadas.");
 
-        yield return new WaitForSeconds(3.0f);
+        if (FadeManager.Instance != null) yield return StartCoroutine(FadeManager.Instance.FadeOut(0.5f));
 
-        // Acende o painel final com o botão de reiniciar
+        yield return new WaitForSeconds(4.5f);
+
+        // Abre o painel de resultado final que possui os direcionamentos de reinício
         if (gameResultUI != null)
         {
             gameResultUI.ShowFinalResult(true, currentRound);
         }
+        else
+        {
+            ReturnToMenu();
+        }
+        
+        if (canvasRaycaster != null) canvasRaycaster.enabled = true;
     }
 
     private void ProcessLoss(bool ranOutRounds)
     {
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayFrustration();
+
         Passenger trueThief = BusGrid.GetAllPassengers().Find(p => p.Status == PassengerStatus.Thief);
         string thiefId = trueThief != null ? trueThief.Id : "Desconhecido";
 
@@ -253,19 +253,48 @@ public class GameManager : MonoBehaviour
             gameResultUI.ShowFinalResult(false, currentRound, thiefId);
         }
     }
+    
+    private string ObterNomePorSpriteId(int spriteId)
+    {
+        string nome = "";
+        switch (spriteId)
+        {
+            case 0:
+                nome = idosa[Random.Range(0, idosa.Count)];
+                return $"<b>{nome}</b> diz:\n<i>\"Tá repreendido em nome do Senhor!\"</i>";
+            case 1:
+                nome = clt[Random.Range(0, clt.Count)];
+                return $"<b>{nome}</b> diz:\n<i>\"Não acredito nisso, vou perder a hora!\"</i>";
+            case 2:
+                nome = menina[Random.Range(0, menina.Count)];
+                return $"<b>{nome}</b> diz:\n<i>\"Eita bixiga!!\"</i>";
+            case 3:
+                nome = menino[Random.Range(0, menino.Count)];
+                return $"<b>{nome}</b> diz:\n<i>\"Vou contar tudo pra minha mãee!\"</i>";
+            default:
+                return "Um passageiro inocente foi expulso.";
+        }
+    }
+
+    private void displayMessage(string message)
+    {
+        if (messagePanel == null || messageText == null) return;
+        messageText.text = message;
+        messagePanel.SetActive(true);
+    }
 
     public void RestartScene()
     {
         Time.timeScale = 1f;
-        UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+        registeredSeats.Clear();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void OnBusArrivedAtStation()
+    public void ReturnToMenu()
     {
-        if (matchSetupManager != null)
-        {
-            matchSetupManager.ExecuteThiefTurn(BusGrid);
-        }
+        Time.timeScale = 1f;
+        registeredSeats.Clear();
+        SceneManager.LoadScene("Menu"); 
     }
 
     public void PauseGame()
