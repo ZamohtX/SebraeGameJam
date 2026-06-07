@@ -178,11 +178,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec9063fe9c6407047ae4fc92f3924c27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameResultUI
-  resultPanel: {fileID: 64020855}
-  titleText: {fileID: 1150578433}
-  descriptionText: {fileID: 1133801123}
-  actionButton: {fileID: 1691650182}
-  buttonText: {fileID: 1577064429}
 --- !u!114 &64020858
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2950,6 +2945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 697558ad0f18e8b90b6f610919a0f08a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MatchSetupManager
+  bus: {fileID: 1948907969}
 --- !u!4 &1008730678
 Transform:
   m_ObjectHideFlags: 0
