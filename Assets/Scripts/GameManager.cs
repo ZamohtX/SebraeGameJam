@@ -64,6 +64,8 @@ public class GameManager : MonoBehaviour
             // Primeiro roubo do jogo (Round 1)
             matchSetupManager.ExecuteThiefTurn(BusGrid);
         }
+
+        if (AudioManager.Instance != null)  AudioManager.Instance.StartBus();
     }
 
     private void PopulateBus()

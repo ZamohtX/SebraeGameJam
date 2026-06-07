@@ -23,7 +23,7 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
         gameObject.SetActive(true);
         
         UpdateVisual();
-        UpdateCollider();
+        // UpdateCollider();
     }
 
     // CORRIGIDO: Implementação do UpdateVisual que estava faltando
@@ -50,6 +50,22 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
         if (PassengerActionUI.Instance != null)
         {
             PassengerActionUI.Instance.Open(this);
+        }
+    }
+
+    public void SetHighlight(bool active)
+    {
+        if (spriteRenderer == null) return;
+
+        if (active)
+        {
+            Color hdrWhite = new Color(1.25f, 1.25f, 1.25f, 1f);
+            spriteRenderer.color = hdrWhite;
+        }
+        else
+        {
+            // Volta para a cor padrão do sprite (branco normal)
+            spriteRenderer.color = Color.white;
         }
     }
 }

@@ -12,6 +12,7 @@ public class RulesPanelUI : MonoBehaviour
 
     public void TogglePanel()
     {
+        if (AudioManager.Instance != null) AudioManager.Instance.PlayClick();
         panel.SetActive(!panel.activeSelf);
     }
 
