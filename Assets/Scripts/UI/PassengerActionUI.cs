@@ -18,8 +18,8 @@ public class PassengerActionUI : MonoBehaviour
 
     public void Open(PassengerView passengerView)
     {
-        // Se o jogador clicar em OUTRO passageiro com a UI j� aberta,
-        // limpamos o highlight do anterior antes de aplicar no novo.
+        AudioManager.Instance.PlayClick();
+
         if (selectedPassenger != null)
         {
             selectedPassenger.SetHighlight(false);
@@ -40,6 +40,8 @@ public class PassengerActionUI : MonoBehaviour
 
     public void Close()
     {
+        AudioManager.Instance.PlayClick();
+
         // Remove o highlight do passageiro antes de limpar a sele��o
         if (selectedPassenger != null)
         {
@@ -52,6 +54,8 @@ public class PassengerActionUI : MonoBehaviour
 
     public void Accuse()
     {
+        AudioManager.Instance.PlayClick();
+
         if (selectedPassenger != null)
         {
             Debug.Log($"Acusado: {selectedPassenger.Passenger.Id}");

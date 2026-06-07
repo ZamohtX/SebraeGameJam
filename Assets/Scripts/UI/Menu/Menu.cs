@@ -5,14 +5,12 @@ public class MainMenu : MonoBehaviour
 {
     public void PlayGame()
     {
+        AudioManager.Instance.PlayClick();
         SceneManager.LoadScene("Main");
     }
 
     public void ExitGame()
     {
-        //Application.Quit();
-
-        // Apenas para testes no Editor
-        Debug.Log("Fechar jogo");
+        Application.Quit();
     }
 }
