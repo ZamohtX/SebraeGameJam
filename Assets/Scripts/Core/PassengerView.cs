@@ -23,7 +23,7 @@ public class PassengerView : MonoBehaviour, IPointerClickHandler
         gameObject.SetActive(true);
         
         UpdateVisual();
-        UpdateCollider();
+        // UpdateCollider();
     }
 
     // CORRIGIDO: Implementação do UpdateVisual que estava faltando
