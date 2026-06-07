@@ -2,7 +2,8 @@ public enum PassengerStatus
 {
     Intact,    // Inteiro/Não roubado
     Robbed,    // Roubado
-    Thief      // É o ladrão da partida
+    Thief,      // É o ladrão da partida
+    Expelled    // Acusado e removido do onibus
 }
 
 public class Passenger

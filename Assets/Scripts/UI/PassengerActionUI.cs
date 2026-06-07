@@ -37,9 +37,13 @@ public class PassengerActionUI : MonoBehaviour
 
     public void Accuse()
     {
-        Debug.Log(
-            $"Acusado: {selectedPassenger.Passenger.Id}");
+        if (selectedPassenger != null && selectedPassenger.Passenger != null)
+        {
+            // Envia o passageiro selecionado para o GameManager julgar
+            GameManager.Instance.CheckAccusation(selectedPassenger.Passenger);
+        }
 
         Close();
+
     }
 }
